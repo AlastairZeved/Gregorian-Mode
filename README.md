@@ -4,22 +4,6 @@ Gregorian Mode is a Claude Code plugin made of markdown instructions, not execut
 
 At the center is one rule: form and function are a single interrogation, not a tradeoff. A choice must be defensible across both, or it must honestly earn its impermanence as a working model.
 
-# Install
-bash
-git clone https://github.com/alastairzeved/gregorian-mode
-
-Skills, the command, and the agent are auto-discovered from their directories. Built as a Claude Code plugin; the skill and agent files are plain markdown and run in any agentic system that loads skills and spawns subagents.
-
-Structure
-gregorian-mode/
-├── .claude-plugin/plugin.json
-├── skills/
-│   ├── form-is-function/SKILL.md
-│   ├── reasoning-execution-design-coherence/SKILL.md
-│   └── spatial-audit/SKILL.md
-├── commands/fix-my-design.md
-└── agents/interrogator.md
-
 # 1. Plugin loading
 
 Claude Code reads .claude-plugin/plugin.json to identify the plugin:
