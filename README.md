@@ -1,177 +1,128 @@
-# Gregorian-Mode
-Gregorian Mode is a prompt-level enforcement system. It uses auto-firing skills to hold one principle, a slash command to orchestrate detection and rebuild, and a subagent to apply pressure when a choice resists. It refuses to let design and function be separated, and it refuses to let a conventional pattern pass just because it has been styled.
-Gregorian Mode is a Claude Code plugin made of markdown instructions, not executable code. plugin.json only declares metadata. The actual behavior comes from three skills, one slash command, and one subagent that Claude Code auto-discovers from the plugin directory.
+# Gregorian Mode _(Gregorian-Mode)_
 
-At the center is one rule: form and function are a single interrogation, not a tradeoff. A choice must be defensible across both, or it must honestly earn its impermanence as a working model.
+[![Standard Readme Style](https://img.shields.io/badge/standard--readme-f7ce68.svg?style=flat-square)](https://github.com/RichardLitt/standard-readme)
+[![Version](https://img.shields.io/badge/version-0.1.0-blue.svg?style=flat-square)](.claude-plugin/plugin.json)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](LICENSE)
 
-# 1. Plugin loading
+A Claude Code plugin that holds design and function as one interrogation — three skills, one command, one interrogator.
 
-Claude Code reads .claude-plugin/plugin.json to identify the plugin:
+Gregorian Mode is a prompt-level enforcement system. It refuses to let design and function be separated, and it refuses to let a conventional pattern pass just because it has been styled.
 
-    name: gregorian-mode
+## Table of Contents
 
-    version, description, author, license, repo
+- [Security](#security)
+- [Background](#background)
+- [Install](#install)
+- [Usage](#usage)
+- [Components](#components)
+- [Philosophy](#philosophy)
+- [Maintainers](#maintainers)
+- [Contributing](#contributing)
+- [License](#license)
 
-Then it discovers:
+## Security
 
-    skills/*/SKILL.md — auto-firing instruction sets
+There is nothing executable here. Gregorian Mode is markdown instructions, not code: `plugin.json` declares metadata only, and all behavior comes from three skills, one slash command, and one subagent that Claude Code auto-discovers from the plugin directory. The plugin makes no network calls, defines no hooks, and runs nothing.
 
-    commands/fix-my-design.md — the /fix-my-design slash command
+Two things to know before relying on it:
 
-    agents/interrogator.md — the interrogator subagent
+- **The approval gate is an instruction, not a lock.** The audit and the `/fix-my-design` command are instructed to present findings and change nothing until you approve. That is a prompt-level discipline, not a runtime guarantee — review the findings yourself before approving anything.
+- **The skills auto-fire.** Claude Code reads each skill's `description` field and loads it whenever the session matches its triggers — `form-is-function` activates for any session touching a design or product decision. If you do not want that posture in a session, disable the plugin rather than arguing with it mid-session.
 
-Skills and agents are plain markdown with YAML frontmatter. Their description fields are the triggers Claude Code uses to decide when to load them.
+## Background
 
-# 2. The three skills
-form-is-function — the law
+Gregorian Mode exists because two failure patterns keep producing bad software, and neither is a knowledge problem. The model usually reasons correctly. The failure happens after the reasoning.
 
-This skill is active whenever any design or product choice is live: a button, color, label, layout, pattern, component, interaction, name, token, spec, etc. Its description says to use it immediately and without exception.
+**The reasoning–execution collapse.** An agent generates correct, specific design analysis, then labels that reasoning "overthinking," rushes execution, and produces output that contradicts the analysis it just completed. When the user gives corrective feedback, the agent reasons correctly again — and repeats the collapse. This is documented in the research: the Berkeley/ETH paper *The Danger of Overthinking* (Cuadron et al., 2025) identifies it as the Reasoning-Action Dilemma across 4,018 agentic task trajectories ([arXiv:2502.08235](https://arxiv.org/abs/2502.08235)), and *Large Reasoning Models are not thinking straight* ([arXiv:2507.00711](https://arxiv.org/abs/2507.00711)) shows that models disregard correct solutions even when explicitly provided them. Gregorian Mode's `reasoning-execution-design-coherence` skill is built directly against this pattern.
 
-It does not decorate. It interrogates. It asks:
+**Conventional-pattern gravity.** A `<div>` with border-radius, padding, and box-shadow is a card even if it is named `surface`. Renaming is not redesigning. Left unopposed, agents reach for the nearest conventional pattern — cards, tabs, modals, badges, filter panels — and a restyle changes nothing. The `spatial-audit` skill is the detection instrument against this gravity: it identifies patterns by rendered shape and behavior, not by class name, and rejects fixes that swap one conventional pattern for another.
 
-    What is this thing, fully?
+The positive philosophy underneath both is spatial: interface elements should behave like physical objects in a space — visual form should do utility work, nothing important should hide behind clicks, and every element should answer "would this exist in a physical version of this space?"
 
-    What has been used as this thing?
+## Install
 
-    What could it be?
+Requires [Claude Code](https://claude.com/claude-code). No build step, no package manager, no dependencies beyond the CLI itself — the plugin is plain markdown that Claude Code discovers on load.
 
-    Does its design optimize or add value to its use?
+```bash
+git clone https://github.com/AlastairZeved/Gregorian-Mode.git
+cd Gregorian-Mode
+claude --plugin-dir .
+```
 
-    Does its function borrow anything from its form?
+The `--plugin-dir` flag loads the plugin directly without marketplace installation. It also accepts a `.zip` archive of the plugin directory if you prefer not to keep the clone.
 
-    What would be surprising or genuinely valuable here?
+There is no `marketplace.json` in this repository yet, so `/plugin marketplace add AlastairZeved/Gregorian-Mode` will not work. If you want this plugin in a marketplace, see [Contributing](#contributing).
 
-    What does this connect to at module, app, and project level?
+## Usage
 
-    Can it tie to something already in progress?
+The skills require nothing from you — that is the point. `form-is-function` and `reasoning-execution-design-coherence` fire on their own when the session matches their triggers, and `spatial-audit` runs when work is being reviewed or presented. You never invoke them directly.
 
-It also defines failure conditions: a choice fails if it was made because adjacent choices were the same, because convention suggested it, because one dimension was satisfied and the other was not checked, because a pattern needed completing, because something needed to go somewhere, or because impermanence was never considered.
+The one thing you invoke is the slash command:
 
-It treats every choice as editable. A working model earns its place by being useful long enough for a better answer to surface. It does not protect a choice from re-interrogation by citing the effort that went into it.
-reasoning-execution-design-coherence — the build guard
-
-This skill prevents a documented failure pattern:
-
-    The agent reasons correctly about design.
-
-    It labels that reasoning “overthinking.”
-
-    It rushes execution.
-
-    The output contradicts the reasoning.
-
-    The user gives corrective feedback.
-
-    The agent repeats the collapse.
-
-It fires on complex design work: multi-section documents, UI/UX with a visual language, pedagogical guides, rebuilds after feedback, and sessions where the user says “systemic,” “design system,” “with intent,” “every decision matters,” or complains that output feels generic, bolted-on, or template-filled.
-
-Its protocol:
-
-    Before writing: list design commitments as numbered decisions. Each names the decision, why it exists, and what the wrong alternative would be.
-
-    During writing: every 80–120 lines or at a section boundary, stop and check whether each commitment is visibly present. If not, roll back to the exact point coherence broke, discard everything after it, and rebuild from the last verified-coherent position.
-
-    After writing: read the output as the user who gave corrective feedback. Point to the specific lines where each commitment is realized. If you cannot point to a line, the commitment was not kept.
-
-The core rule: you cannot reason with poisoned context. Patching collapsed output produces more collapse. Rollback and rebuild.
-spatial-audit — the detector
-
-This skill audits built HTML/CSS against a strict non-conventional design philosophy. It is the detection instrument. It runs on its own when reviewing output, completing a build phase, or before presenting. It is also the detection step inside /fix-my-design.
-
-Its core law: a <div> with border-radius, padding, and box-shadow is a card even if named surface. Renaming is not redesigning. No conventional pattern passes. No fix that swaps one conventional pattern for another passes either.
-
-It evaluates every element across five dimensions:
-
-    Conventional pattern detection — cards, lists, tabs, modals, accordions, filter panels, badges, identified by rendered shape and behavior, not class name.
-
-    Spatial/physical metaphor — does each element behave like a physical object? Would it exist in a physical version of this space?
-
-    Visual utility work — does visual form carry information, or is it text in styled containers?
-
-    Object permanence — is everything visible, or is content hidden behind clicks, toggles, tabs, modals, or scroll?
-
-    Content framing — forward-looking vs. fear-based, additive vs. problem-focused.
-
-Every proposed fix must answer three questions:
-
-    What conventional pattern does this replace?
-
-    What does the visual form communicate that text alone cannot?
-
-    Would this element exist in a physical version of this space?
-
-If the fix can be described using conventional UI vocabulary — badge, chip, card, filter, toggle, panel, sidebar, modal, dropdown, accordion, tab — it is still conventional.
-
-It produces severity-ranked findings and waits for explicit user approval before anything changes.
-
-# 3. The command: /fix-my-design
-
-This is the one door you invoke directly. Its frontmatter gives it a description and an argument hint. When you type:
-text
-
+```
 /fix-my-design settings.html
+```
 
-$ARGUMENTS becomes settings.html. The command body is inserted as the prompt.
+The argument is any design, component, or file you want fixed. A run then proceeds:
 
-Its procedure:
+1. **Detect.** The command runs `spatial-audit` on the target: every element is evaluated across five dimensions (conventional pattern, spatial metaphor, visual utility, object permanence, content framing) and severity-ranked findings are produced, each with a fix proposal.
+2. **Present and wait.** Findings and proposals are shown. Nothing changes yet — the audit's approval gate holds inside the command.
+3. **Rebuild, don't patch.** On approval, each fix rolls back to the last defensible position and rebuilds from there. Adding styling is never the fix; if the audit's own anti-pattern table would catch the proposed fix, it is still conventional and gets redesigned.
+4. **Escalate resistant choices.** Where the conventional answer is strong and the better answer is not obvious, the command invokes the `interrogator` subagent, which applies pressure until the choice earns its place or earns its impermanence.
 
-    Detect. Run the spatial-audit skill on the target. Produce severity-ranked findings across the five dimensions, each with a fix proposal.
+The output returns the reworked design plus a rationale for every change: which conventional pattern was rejected, and what the new form communicates that text alone could not.
 
-    Present and wait. Show the findings and proposals. Change nothing yet. The audit’s approval gate holds inside the command.
+## Components
 
-    On approval, rebuild — don’t patch. For each approved finding, roll back to the last defensible position and rebuild from there. Adding styling is never the fix. If the audit’s anti-pattern table or red flags would catch the proposed fix, it is still conventional — redesign.
+Five markdown components, auto-discovered by Claude Code:
 
-    Hand resistant choices to the interrogator. Where the conventional answer is strong and the better answer is not obvious, invoke the interrogator subagent to apply pressure until the choice earns its place or earns its impermanence.
+| Component | Type | Role |
+|---|---|---|
+| [`form-is-function`](skills/form-is-function/SKILL.md) | Skill (auto-firing) | The law — holds the first principle over every design or product decision |
+| [`reasoning-execution-design-coherence`](skills/reasoning-execution-design-coherence/SKILL.md) | Skill (auto-firing) | The build guard — keeps execution tethered to reasoning through a commit/checkpoint/rebuild protocol |
+| [`spatial-audit`](skills/spatial-audit/SKILL.md) | Skill (auto-firing) | The detector — audits built HTML/CSS against the non-conventional philosophy |
+| [`/fix-my-design`](commands/fix-my-design.md) | Slash command | The orchestrator — audit → approval → rebuild → interrogator |
+| [`interrogator`](agents/interrogator.md) | Subagent | The pressure — interrogation applied to a choice that resists |
 
-The output must return the reworked design, and for each change name what conventional pattern was rejected and what the new form communicates. It must not present a choice it cannot defend across both form and function.
+Each component's description field is its trigger: Claude Code reads the descriptions and loads the skill when the session matches, with no manual invocation. The command is the only manually invoked door.
 
-# 4. The subagent: interrogator
+## Philosophy
 
-The interrogator is not a design consultant. It is an interrogation partner. It is auto-invoked when a decision resists easy resolution or when the conventional answer is strong but suspect. It is also called by /fix-my-design when a choice will not yield.
+**The first principle.** Design and function are not two categories to balance or trade off against each other. They are a single interrogation applied to any object, component, or decision until its value is defensible across both dimensions simultaneously — or until it earns its impermanence honestly as a working model. This is not a preference; it is the prior condition, and it governs before any conversation begins. A choice originating in form is held to the exact same standard as a choice originating in function: a green button that is green because the other buttons are green has failed, and a component placed because an action needed a home has failed, and neither failure is more acceptable than the other.
 
-It holds the same standard as form-is-function: design and function are one interrogation. It applies the eight questions to every design or product decision that enters the session. It does not release a choice until it has earned its place or earned its impermanence honestly.
+**The interrogation.** Every choice — regardless of how small, obvious, or conventional it appears — is run through eight questions before it is committed:
 
-It pushes back immediately when a choice is made because adjacent choices were the same, because convention suggested it, because something needed to go somewhere, because one dimension was satisfied and the other was not checked, because a pattern is being completed rather than a value being produced, or because impermanence was never considered.
+1. What is this thing, fully?
+2. What has been used as this thing?
+3. What could it be?
+4. Does its design optimize or add value to its use?
+5. Does its function borrow anything from its form?
+6. What would be surprising or genuinely valuable here?
+7. What does this choice connect to at module, app, and project level?
+8. Can it tie to something already in progress?
 
-It does not make aesthetic choices on your behalf. It does not soften pushback. It does not treat any choice as too small or too obvious to interrogate. It does not treat form and function as a tradeoff.
+**Failure conditions.** A choice has failed the interrogation if it was made because adjacent choices were the same, because convention suggested it, because one dimension was satisfied and the other was not checked, because a pattern needed completing, because something needed to go somewhere, or because impermanence was never considered. Failure conditions are named directly, not softened.
 
-Its tone is precise, direct, and honest in the way a rigorous collaborator is honest. When something earns its place, it says so. When it doesn’t, it says that too.
+**Impermanence.** Every choice is editable. A working model earns its place by being useful long enough for a better answer to surface — the whiteboard doesn't fail when it's replaced, it succeeded by lasting exactly as long as it needed to. No choice is protected from re-interrogation by citing the effort that went into it.
 
-# 5. How they run together in a session
+**Rollback, not patch.** When output collapses — execution betraying the reasoning that preceded it — the correct action is to roll back to the last verified-coherent position and rebuild. You cannot reason with poisoned context: patching collapsed output produces more collapse.
 
-A typical run looks like this:
+**No tradeoff.** A choice that satisfies form but not function, or function but not form, has not finished the interrogation.
 
-    You open a Claude Code session with the plugin installed.
+## Maintainers
 
-    The session touches UI design. form-is-function is already active because its description says it governs before any design or product decision is made.
+[@AlastairZeved](https://github.com/AlastairZeved)
 
-    If the work is complex, reasoning-execution-design-coherence also fires to keep reasoning coherent through the build.
+## Contributing
 
-    You type /fix-my-design settings.html.
+Issues and pull requests are welcome on [GitHub Issues](https://github.com/AlastairZeved/Gregorian-Mode/issues) — that is also the place for questions about how the skills or the command behave in a given session.
 
-    The command runs spatial-audit. The model reads the HTML/CSS, extracts the design spec from project instructions and conversation, and audits every element across the five dimensions.
+The contribution requirements follow from what the plugin is:
 
-    It presents severity-ranked findings and fix proposals. It waits.
+- **Markdown only.** The plugin is prompt-level enforcement by design; do not add executable code, hooks, or build steps. `plugin.json` carries metadata, nothing more.
+- **Descriptions are triggers.** A new skill, command, or agent is only as good as its YAML frontmatter `description`, because that is what Claude Code reads to decide when to load it. Write descriptions that name their triggers concretely.
+- **The standard applies to the plugin's own output.** Changes to the skills, command, or agent should survive the same interrogation they enforce — name what conventional documentation pattern you are rejecting and what the change adds.
 
-    You approve some or all fixes.
+## License
 
-    The model rebuilds from the last defensible position. It does not patch with styling. If a proposed fix is still conventional, the audit’s anti-pattern table and red flags catch it and force a redesign.
-
-    For a choice that won’t yield, the command invokes the interrogator subagent. The interrogator applies the eight questions and holds the choice until it earns its place or earns its impermanence.
-
-    The final output is the reworked design plus a rationale for each change: what conventional pattern was rejected and what the new form communicates.
-
-Key mechanics
-
-    Auto-activation: Skills are not manually invoked. Claude Code reads their descriptions and loads them when the session matches their triggers.
-
-    Command orchestration: /fix-my-design is the only thing you invoke directly. It orchestrates the audit, the rebuild, and the interrogator.
-
-    Approval gate: spatial-audit and the command both require explicit user approval before changes. This is an instruction to the model, not a hard runtime lock.
-
-    Rollback, not patch: When coherence breaks or a fix is still conventional, the correct action is to roll back to the last defensible position and rebuild. Patching collapsed output produces more collapse.
-
-    Impermanence: Every choice is editable. A working model earns its place by being useful long enough for something better to surface. It is not protected by the effort that went into it.
-
-    No tradeoff: A choice that satisfies form but not function, or function but not form, has not finished the interrogation.
+MIT © Alastair Zeved — see [LICENSE](LICENSE) for the full text.
