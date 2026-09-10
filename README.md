@@ -3,6 +3,7 @@ Gregorian Mode is a prompt-level enforcement system. It uses auto-firing skills 
 Gregorian Mode is a Claude Code plugin made of markdown instructions, not executable code. plugin.json only declares metadata. The actual behavior comes from three skills, one slash command, and one subagent that Claude Code auto-discovers from the plugin directory.
 
 At the center is one rule: form and function are a single interrogation, not a tradeoff. A choice must be defensible across both, or it must honestly earn its impermanence as a working model.
+
 1. Plugin loading
 
 Claude Code reads .claude-plugin/plugin.json to identify the plugin:
@@ -20,6 +21,7 @@ Then it discovers:
     agents/interrogator.md — the interrogator subagent
 
 Skills and agents are plain markdown with YAML frontmatter. Their description fields are the triggers Claude Code uses to decide when to load them.
+
 2. The three skills
 form-is-function — the law
 
@@ -102,6 +104,7 @@ Every proposed fix must answer three questions:
 If the fix can be described using conventional UI vocabulary — badge, chip, card, filter, toggle, panel, sidebar, modal, dropdown, accordion, tab — it is still conventional.
 
 It produces severity-ranked findings and waits for explicit user approval before anything changes.
+
 3. The command: /fix-my-design
 
 This is the one door you invoke directly. Its frontmatter gives it a description and an argument hint. When you type:
@@ -122,6 +125,7 @@ Its procedure:
     Hand resistant choices to the interrogator. Where the conventional answer is strong and the better answer is not obvious, invoke the interrogator subagent to apply pressure until the choice earns its place or earns its impermanence.
 
 The output must return the reworked design, and for each change name what conventional pattern was rejected and what the new form communicates. It must not present a choice it cannot defend across both form and function.
+
 4. The subagent: interrogator
 
 The interrogator is not a design consultant. It is an interrogation partner. It is auto-invoked when a decision resists easy resolution or when the conventional answer is strong but suspect. It is also called by /fix-my-design when a choice will not yield.
@@ -133,6 +137,7 @@ It pushes back immediately when a choice is made because adjacent choices were t
 It does not make aesthetic choices on your behalf. It does not soften pushback. It does not treat any choice as too small or too obvious to interrogate. It does not treat form and function as a tradeoff.
 
 Its tone is precise, direct, and honest in the way a rigorous collaborator is honest. When something earns its place, it says so. When it doesn’t, it says that too.
+
 5. How they run together in a session
 
 A typical run looks like this:
