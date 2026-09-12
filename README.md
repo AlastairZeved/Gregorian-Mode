@@ -1,10 +1,10 @@
 # Gregorian Mode _(Gregorian-Mode)_
 
 [![Standard Readme Style](https://img.shields.io/badge/standard--readme-f7ce68.svg?style=flat-square)](https://github.com/RichardLitt/standard-readme)
-[![Version](https://img.shields.io/badge/version-0.1.0-blue.svg?style=flat-square)](.claude-plugin/plugin.json)
+[![Version](https://img.shields.io/badge/version-1.0.0-blue.svg?style=flat-square)](plugin.json)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](LICENSE)
 
-A Claude Code plugin that holds design and function as one interrogation — three skills, one command, one interrogator.
+A portable design-enforcement plugin — Agent Plugins 1.0.0 compliant, with Claude Code extensions for the command and subagent.
 
 Gregorian Mode is a prompt-level enforcement system. It refuses to let design and function be separated, and it refuses to let a conventional pattern pass just because it has been styled.
 
