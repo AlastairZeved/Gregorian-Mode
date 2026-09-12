@@ -1,5 +1,6 @@
 ---
 name: form-is-function
+license: MIT
 description: >
   Apply the first principle — design and function are a single interrogation, not separate categories — to any session involving something a user sees, interacts with, or feels. Use this skill immediately and without exception whenever the session touches: design system specs, design tokens, UI specs, interaction specs, spatial logic, component architecture, naming or nomenclature decisions, layout decisions, visual hierarchy, motion or animation specs, planning or ideation that will eventually produce any of the above. This skill governs before any design or product decision is made, not after. If a choice is being considered — button, color, label, layout, pattern, component, interaction — this skill is active. Do not treat this as a style guide. It is a source truth about how all design and product decisions must be interrogated in this context.
 ---

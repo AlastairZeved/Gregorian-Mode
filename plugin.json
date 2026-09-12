@@ -1,0 +1,11 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "gregorian-mode",
+  "version": "0.1.0",
+  "description": "Holds an agent's reasoning, writing, and design output coherent with one principle: design and function are a single interrogation, not a tradeoff.",
+  "author": { "name": "Alastair Zeved" },
+  "homepage": "https://github.com/AlastairZeved/Gregorian-Mode",
+  "repository": "https://github.com/AlastairZeved/Gregorian-Mode",
+  "license": "MIT",
+  "keywords": ["design", "ui-ux", "skills", "methodology"]
+}

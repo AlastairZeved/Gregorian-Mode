@@ -53,6 +53,17 @@ The `--plugin-dir` flag loads the plugin directly without marketplace installati
 
 There is no `marketplace.json` in this repository yet, so `/plugin marketplace add AlastairZeved/Gregorian-Mode` will not work. If you want this plugin in a marketplace, see [Contributing](#contributing).
 
+## Agent Plugins standard
+
+This repository is dual-packaged: it is both a Claude Code plugin (`.claude-plugin/`) and an **Agent Plugins 1.0.0** plugin (root `plugin.json`). The same skills under `skills/` serve both packaging standards — the skills are the portable source of truth; `commands/` and `agents/` are Claude Code conveniences on top of them.
+
+Install paths:
+
+- **Claude Code** — existing marketplace/plugin install, unchanged (see [Install](#install)).
+- **Hermes Agent** — `hermes plugins install AlastairZeved/Gregorian-Mode --no-enable` then `hermes plugins enable <plugin-name>` (portable package adapter; skills appear namespaced as `agent-plugin-gregorian-mode-*` via skills_list/skill_view).
+- **Codex, Cursor, Copilot, ChatGPT, Kiro, VS Code** — `npx plugins add AlastairZeved/Gregorian-Mode` (Agent Plugins translation layer).
+- **Any other SKILL.md-compatible agent** — copy any folder under `skills/` into the agent's skills directory.
+
 ## Usage
 
 The skills require nothing from you — that is the point. `form-is-function` and `reasoning-execution-design-coherence` fire on their own when the session matches their triggers, and `spatial-audit` runs when work is being reviewed or presented. You never invoke them directly.
@@ -74,17 +85,19 @@ The output returns the reworked design plus a rationale for every change: which 
 
 ## Components
 
-Five markdown components, auto-discovered by Claude Code:
+Seven markdown components — the skills are portable to any SKILL.md-compatible agent; the command and the subagent are Claude Code conveniences:
 
 | Component | Type | Role |
 |---|---|---|
-| [`form-is-function`](skills/form-is-function/SKILL.md) | Skill (auto-firing) | The law — holds the first principle over every design or product decision |
-| [`reasoning-execution-design-coherence`](skills/reasoning-execution-design-coherence/SKILL.md) | Skill (auto-firing) | The build guard — keeps execution tethered to reasoning through a commit/checkpoint/rebuild protocol |
-| [`spatial-audit`](skills/spatial-audit/SKILL.md) | Skill (auto-firing) | The detector — audits built HTML/CSS against the non-conventional philosophy |
-| [`/fix-my-design`](commands/fix-my-design.md) | Slash command | The orchestrator — audit → approval → rebuild → interrogator |
-| [`interrogator`](agents/interrogator.md) | Subagent | The pressure — interrogation applied to a choice that resists |
+| [`form-is-function`](skills/form-is-function/SKILL.md) | Skill (portable + auto-firing) | The law — holds the first principle over every design or product decision |
+| [`reasoning-execution-design-coherence`](skills/reasoning-execution-design-coherence/SKILL.md) | Skill (portable + auto-firing) | The build guard — keeps execution tethered to reasoning through a commit/checkpoint/rebuild protocol |
+| [`spatial-audit`](skills/spatial-audit/SKILL.md) | Skill (portable + auto-firing) | The detector — audits built HTML/CSS against the non-conventional philosophy |
+| [`fix-my-design`](skills/fix-my-design/SKILL.md) | Skill (portable) | The orchestration procedure — audit → approval → rebuild → interrogator (portable form of the `/fix-my-design` command) |
+| [`interrogator`](skills/interrogator/SKILL.md) | Skill (portable) | The pressure — interrogation applied to a choice that resists (portable form of the `interrogator` subagent) |
+| [`/fix-my-design`](commands/fix-my-design.md) | Slash command (Claude Code) | Thin wrapper: loads and follows the `fix-my-design` skill |
+| [`interrogator`](agents/interrogator.md) | Subagent (Claude Code) | The pressure — interrogation applied to a choice that resists |
 
-Each component's description field is its trigger: Claude Code reads the descriptions and loads the skill when the session matches, with no manual invocation. The command is the only manually invoked door.
+Each skill's description field is its trigger: Claude Code reads the descriptions and loads the skill when the session matches, with no manual invocation. The command is the only manually invoked door.
 
 ## Philosophy
 
