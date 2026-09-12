@@ -1,5 +1,6 @@
 ---
 name: reasoning-execution-design-coherence
+license: MIT
 description: >
   Prevents the failure pattern where an agent generates correct design reasoning then
   abandons it during execution, producing output that contradicts its own analysis.

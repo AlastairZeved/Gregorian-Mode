@@ -1,5 +1,6 @@
 ---
 name: spatial-audit
+license: MIT
 description: Audits HTML/CSS against non-conventional spatial design principles. Use when reviewing HTML/CSS output, completing a build phase, or before presenting work. Also the detection step /fix-my-design runs before rebuilding.
 ---
 
