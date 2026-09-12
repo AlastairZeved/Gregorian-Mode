@@ -6,5 +6,11 @@
     "name": "Alastair Zeved"
   },
   "repository": "https://github.com/AlastairZeved/Gregorian-Mode",
-  "license": "MIT"
+  "license": "MIT",
+  "commands": [
+    "./com.anthropic.claude/commands/fix-my-design.md"
+  ],
+  "agents": [
+    "./com.anthropic.claude/agents/interrogator.md"
+  ]
 }
