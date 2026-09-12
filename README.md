@@ -1,10 +1,10 @@
 # Gregorian Mode _(Gregorian-Mode)_
 
 [![Standard Readme Style](https://img.shields.io/badge/standard--readme-f7ce68.svg?style=flat-square)](https://github.com/RichardLitt/standard-readme)
-[![Version](https://img.shields.io/badge/version-1.0.0-blue.svg?style=flat-square)](plugin.json)
+[![Agent Plugins 1.0.0](https://img.shields.io/badge/Agent_Plugins-1.0.0-blue.svg?style=flat-square)](plugin.json)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](LICENSE)
 
-A portable design-enforcement plugin — Agent Plugins 1.0.0 compliant, with Claude Code extensions for the command and subagent.
+A portable design-enforcement plugin — Agent Plugins 1.0.0, installable across multiple agents.
 
 Gregorian Mode is a prompt-level enforcement system. It refuses to let design and function be separated, and it refuses to let a conventional pattern pass just because it has been styled.
 
@@ -22,12 +22,12 @@ Gregorian Mode is a prompt-level enforcement system. It refuses to let design an
 
 ## Security
 
-There is nothing executable here. Gregorian Mode is markdown instructions, not code: `plugin.json` declares metadata only, and all behavior comes from three skills, one slash command, and one subagent that Claude Code loads from the paths declared in `.claude-plugin/plugin.json`. The plugin makes no network calls, defines no hooks, and runs nothing.
+There is nothing executable here. Gregorian Mode is markdown instructions, not code: `plugin.json` declares metadata only, and all behavior comes from five skills that an agent loads from the paths declared in the manifest. The plugin makes no network calls, defines no hooks, and runs nothing.
 
 Two things to know before relying on it:
 
-- **The approval gate is an instruction, not a lock.** The audit and the `/fix-my-design` command are instructed to present findings and change nothing until you approve. That is a prompt-level discipline, not a runtime guarantee — review the findings yourself before approving anything.
-- **The skills auto-fire.** Claude Code reads each skill's `description` field and loads it whenever the session matches its triggers — `form-is-function` activates for any session touching a design or product decision. If you do not want that posture in a session, disable the plugin rather than arguing with it mid-session.
+- **The approval gate is an instruction, not a lock.** The audit and the fix procedure are instructed to present findings and change nothing until you approve. That is a prompt-level discipline, not a runtime guarantee — review the findings yourself before approving anything.
+- **The skills auto-fire.** Agents read each skill's `description` field and load it whenever the session matches its triggers — `form-is-function` activates for any session touching a design or product decision. If you do not want that posture in a session, disable the plugin rather than arguing with it mid-session.
 
 ## Background
 
@@ -41,63 +41,81 @@ The positive philosophy underneath both is spatial: interface elements should be
 
 ## Install
 
-Requires [Claude Code](https://claude.com/claude-code). No build step, no package manager, no dependencies beyond the CLI itself — the plugin is plain markdown that Claude Code discovers on load.
+No build step, no package manager, no runtime dependencies — the plugin is plain markdown that a compatible agent discovers on load. All skills live under `skills/`; the root `plugin.json` is an [Agent Plugins 1.0.0](https://agent-plugins.org/specification) manifest, which is the portable source of truth.
+
+### Claude Code
+
+Requires [Claude Code](https://claude.com/claude-code).
 
 ```bash
 git clone https://github.com/AlastairZeved/Gregorian-Mode.git
-cd Gregorian-Mode
-claude --plugin-dir .
+claude --plugin-dir ./Gregorian-Mode
 ```
 
-The `--plugin-dir` flag loads the plugin directly without marketplace installation. It also accepts a `.zip` archive of the plugin directory if you prefer not to keep the clone.
+The `--plugin-dir` flag loads the plugin directly without marketplace installation, and also accepts a `.zip` archive of the plugin directory. There is no `marketplace.json` in this repository, so `/plugin marketplace add AlastairZeved/Gregorian-Mode` will not work; `--plugin-dir` is the documented direct-load path. The command and subagent that Claude Code loads live under the `com.anthropic.claude/` client namespace.
 
-There is no `marketplace.json` in this repository yet, so `/plugin marketplace add AlastairZeved/Gregorian-Mode` will not work. If you want this plugin in a marketplace, see [Contributing](#contributing).
+### Hermes Agent
 
-## Agent Plugins standard
+```bash
+hermes plugins install AlastairZeved/Gregorian-Mode --no-enable
+hermes plugins enable gregorian-mode
+hermes gateway restart
+```
 
-This repository is dual-packaged: it is both a Claude Code plugin (`.claude-plugin/`) and an **Agent Plugins 1.0.0** plugin (root `plugin.json`). The same skills under `skills/` serve both packaging standards — the skills are the portable source of truth; `commands/` and `agents/` are Claude Code conveniences on top of them, kept under the `com.anthropic.claude/` client namespace so the portable root stays clean per the Agent Plugins 1.0.0 standard.
+Portable Agent Plugins packages install disabled by default; enable explicitly and restart the gateway for the skills to take effect. (Verified against the live runtime: the install, enable, and skill discovery all work with the repository as shipped.)
 
-Install paths:
+### Codex, Cursor, Copilot, ChatGPT, Kiro, VS Code
 
-- **Claude Code** — existing marketplace/plugin install, unchanged (see [Install](#install)).
-- **Hermes Agent** — `hermes plugins install AlastairZeved/Gregorian-Mode --no-enable` then `hermes plugins enable <plugin-name>` (portable package adapter; skills appear namespaced as `agent-plugin-gregorian-mode-*` via skills_list/skill_view).
-- **Codex, Cursor, Copilot, ChatGPT, Kiro, VS Code** — `npx plugins add AlastairZeved/Gregorian-Mode` (Agent Plugins translation layer).
-- **Any other SKILL.md-compatible agent** — copy any folder under `skills/` into the agent's skills directory.
+```bash
+npx plugins.sh install <slug>
+```
+
+via [plugins.sh](https://plugins.sh), the Agent Plugins translation layer. Note: the plugin is **not yet listed** in the plugins.sh directory, so the install command will not resolve this repository until it is submitted (see [Contributing](#contributing)). You can validate the package against the standard today with `npx plugins.sh validate https://github.com/AlastairZeved/Gregorian-Mode` — the root manifest reports as conformant.
+
+### Any other SKILL.md-compatible agent
+
+Copy any folder under `skills/` into the agent's skills directory. Each skill is a self-contained `SKILL.md` with YAML frontmatter (`name`, `license`, `description`); nothing else is required.
+
+### Dependencies
+
+None. Markdown only.
 
 ## Usage
 
 The skills require nothing from you — that is the point. `form-is-function` and `reasoning-execution-design-coherence` fire on their own when the session matches their triggers, and `spatial-audit` runs when work is being reviewed or presented. You never invoke them directly.
 
-The one thing you invoke is the slash command:
+The one thing you invoke is the fix procedure. In Claude Code it is the slash command; in any other agent, ask for the same outcome in words:
 
 ```
 /fix-my-design settings.html
 ```
 
+or: *"Run fix-my-design on `settings.html`."*
+
 The argument is any design, component, or file you want fixed. A run then proceeds:
 
-1. **Detect.** The command runs `spatial-audit` on the target: every element is evaluated across five dimensions (conventional pattern, spatial metaphor, visual utility, object permanence, content framing) and severity-ranked findings are produced, each with a fix proposal.
-2. **Present and wait.** Findings and proposals are shown. Nothing changes yet — the audit's approval gate holds inside the command.
+1. **Detect.** The procedure runs `spatial-audit` on the target: every element is evaluated across five dimensions (conventional pattern, spatial metaphor, visual utility, object permanence, content framing) and severity-ranked findings are produced, each with a fix proposal.
+2. **Present and wait.** Findings and proposals are shown. Nothing changes yet — the audit's approval gate holds inside the procedure.
 3. **Rebuild, don't patch.** On approval, each fix rolls back to the last defensible position and rebuilds from there. Adding styling is never the fix; if the audit's own anti-pattern table would catch the proposed fix, it is still conventional and gets redesigned.
-4. **Escalate resistant choices.** Where the conventional answer is strong and the better answer is not obvious, the command invokes the `interrogator` subagent, which applies pressure until the choice earns its place or earns its impermanence.
+4. **Escalate resistant choices.** Where the conventional answer is strong and the better answer is not obvious, the procedure invokes the `interrogator` — as a subagent where the runtime supports delegation (Claude Code's Task tool, Hermes Agent's `delegate_task`), inline otherwise.
 
 The output returns the reworked design plus a rationale for every change: which conventional pattern was rejected, and what the new form communicates that text alone could not.
 
 ## Components
 
-Seven markdown components — the skills are portable to any SKILL.md-compatible agent; the command and the subagent are Claude Code conveniences:
+Seven markdown components. The five skills are portable to any SKILL.md-compatible agent; the command and the subagent are Claude Code conveniences that wrap two of the skills:
 
 | Component | Type | Role |
 |---|---|---|
 | [`form-is-function`](skills/form-is-function/SKILL.md) | Skill (portable + auto-firing) | The law — holds the first principle over every design or product decision |
 | [`reasoning-execution-design-coherence`](skills/reasoning-execution-design-coherence/SKILL.md) | Skill (portable + auto-firing) | The build guard — keeps execution tethered to reasoning through a commit/checkpoint/rebuild protocol |
 | [`spatial-audit`](skills/spatial-audit/SKILL.md) | Skill (portable + auto-firing) | The detector — audits built HTML/CSS against the non-conventional philosophy |
-| [`fix-my-design`](skills/fix-my-design/SKILL.md) | Skill (portable) | The orchestration procedure — audit → approval → rebuild → interrogator (portable form of the `/fix-my-design` command) |
-| [`interrogator`](skills/interrogator/SKILL.md) | Skill (portable) | The pressure — interrogation applied to a choice that resists (portable form of the `interrogator` subagent) |
+| [`fix-my-design`](skills/fix-my-design/SKILL.md) | Skill (portable) | The orchestration procedure — audit → approval → rebuild → interrogator |
+| [`interrogator`](skills/interrogator/SKILL.md) | Skill (portable) | The pressure — interrogation applied to a choice that resists |
 | [`/fix-my-design`](com.anthropic.claude/commands/fix-my-design.md) | Slash command (Claude Code) | Thin wrapper: loads and follows the `fix-my-design` skill |
 | [`interrogator`](com.anthropic.claude/agents/interrogator.md) | Subagent (Claude Code) | The pressure — interrogation applied to a choice that resists |
 
-Each skill's description field is its trigger: Claude Code reads the descriptions and loads the skill when the session matches, with no manual invocation. The command is the only manually invoked door.
+Each skill's `description` field is its trigger: agents read the descriptions and load the skill when the session matches, with no manual invocation. The fix procedure is the only manually invoked door.
 
 ## Philosophy
 
@@ -128,12 +146,13 @@ Each skill's description field is its trigger: Claude Code reads the description
 
 ## Contributing
 
-Issues and pull requests are welcome on [GitHub Issues](https://github.com/AlastairZeved/Gregorian-Mode/issues) — that is also the place for questions about how the skills or the command behave in a given session.
+Issues and pull requests are welcome on [GitHub Issues](https://github.com/AlastairZeved/Gregorian-Mode/issues) — that is also the place for questions about how the skills or the fix procedure behave in a given agent.
 
 The contribution requirements follow from what the plugin is:
 
 - **Markdown only.** The plugin is prompt-level enforcement by design; do not add executable code, hooks, or build steps. `plugin.json` carries metadata, nothing more.
-- **Descriptions are triggers.** A new skill, command, or agent is only as good as its YAML frontmatter `description`, because that is what Claude Code reads to decide when to load it. Write descriptions that name their triggers concretely.
+- **Descriptions are triggers.** A new skill, command, or agent is only as good as its YAML frontmatter `description`, because that is what agents read to decide when to load it. Write descriptions that name their triggers concretely.
+- **Respect the packaging split.** Portable components (skills) live at the root; client-specific conveniences (commands, agents) live under `com.anthropic.claude/`. A new portable component goes under `skills/`; a Claude Code wrapper for it goes in the client namespace.
 - **The standard applies to the plugin's own output.** Changes to the skills, command, or agent should survive the same interrogation they enforce — name what conventional documentation pattern you are rejecting and what the change adds.
 
 ## License
