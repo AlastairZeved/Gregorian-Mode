@@ -1,0 +1,21 @@
+# Repo tooling, not plugin content. The "markdown only" contributing rule
+# governs the plugin package; this workflow is deliberate repo tooling,
+# approved in issue #8.
+name: manifest-sync
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    name: Manifests agree on name and version
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Every tracked plugin.json must agree on name and version
+        run: python3 .github/scripts/check-manifest-sync.py
