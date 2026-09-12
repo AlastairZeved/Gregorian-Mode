@@ -1,26 +1,46 @@
+<p align="center">
+  <img src="docs/assets/banner.png" alt="Gregorian Mode — form and function are inseparable." width="830">
+</p>
+
 # Gregorian Mode _(Gregorian-Mode)_
 
 [![Standard Readme Style](https://img.shields.io/badge/standard--readme-f7ce68.svg?style=flat-square)](https://github.com/RichardLitt/standard-readme)
 [![Agent Plugins 1.0.0](https://img.shields.io/badge/Agent_Plugins-1.0.0-blue.svg?style=flat-square)](plugin.json)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](LICENSE)
 
-A portable design-enforcement plugin — Agent Plugins 1.0.0, installable across multiple agents.
+[![Install on Claude Code](https://img.shields.io/badge/install-Claude_Code-black?style=flat-square)](#claude-code)
+[![Install on Hermes Agent](https://img.shields.io/badge/install-Hermes_Agent-black?style=flat-square)](#hermes-agent)
+[![Install on Codex](https://img.shields.io/badge/install-Codex-black?style=flat-square)](#codex)
+[![Install on Cursor](https://img.shields.io/badge/install-Cursor-black?style=flat-square)](#cursor)
+[![Install on GitHub Copilot](https://img.shields.io/badge/install-GitHub_Copilot-black?style=flat-square)](#github-copilot)
 
-Gregorian Mode is a prompt-level enforcement system. It refuses to let design and function be separated, and it refuses to let a conventional pattern pass just because it has been styled.
+## ⚡ TL;DR
+
+<a name="tldr" id="tldr"></a>
+
+Gregorian Mode is a portable, prompt-level design-enforcement plugin — Agent Plugins 1.0.0, installable across multiple agents, with no build step, no package manager, and no runtime dependencies. It refuses to let design and function be separated, and it refuses to let a conventional pattern pass just because it has been styled. Five skills carry the enforcement — the law, the build guard, the detector, the fix procedure, the interrogator — and they fire on their own: install it, and every design decision in the session is held to the same standard.
+
+https://github.com/user-attachments/assets/bb7b0823-652d-4e60-b161-463fbf37bca2
+
+*The 72-second showcase — the failure patterns, the five skills, and the fix procedure in motion. Also in-repo: <a href="docs/assets/gregorian-mode-showcase.mp4">MP4 (32 MB)</a> · <a href="docs/assets/showcase-poster.jpg">poster frame</a>.*
+
 
 ## Table of Contents
 
-- [Security](#security)
-- [Background](#background)
-- [Install](#install)
-- [Usage](#usage)
-- [Components](#components)
-- [Philosophy](#philosophy)
+- [⚡ TL;DR](#tldr)
+- [🛡️ Security](#security)
+- [📜 Background](#background)
+- [📦 Install](#install)
+- [🚀 Usage](#usage)
+- [🧩 Components](#components)
+- [🏛️ Philosophy](#philosophy)
 - [Maintainers](#maintainers)
 - [Contributing](#contributing)
 - [License](#license)
 
-## Security
+## 🛡️ Security
+
+<a name="security" id="security"></a>
 
 There is nothing executable here. Gregorian Mode is markdown instructions, not code: `plugin.json` declares metadata only, and all behavior comes from five skills that an agent loads from the paths declared in the manifest. The plugin makes no network calls, defines no hooks, and runs nothing.
 
@@ -29,21 +49,40 @@ Two things to know before relying on it:
 - **The approval gate is an instruction, not a lock.** The audit and the fix procedure are instructed to present findings and change nothing until you approve. That is a prompt-level discipline, not a runtime guarantee — review the findings yourself before approving anything.
 - **The skills auto-fire.** Agents read each skill's `description` field and load it whenever the session matches its triggers — `form-is-function` activates for any session touching a design or product decision. If you do not want that posture in a session, disable the plugin rather than arguing with it mid-session.
 
-## Background
+## 📜 Background
+
+<a name="background" id="background"></a>
 
 Gregorian Mode exists because two failure patterns keep producing bad software, and neither is a knowledge problem. The model usually reasons correctly. The failure happens after the reasoning.
 
-**The reasoning–execution collapse.** An agent generates correct, specific design analysis, then labels that reasoning "overthinking," rushes execution, and produces output that contradicts the analysis it just completed. When the user gives corrective feedback, the agent reasons correctly again — and repeats the collapse. This is documented in the research: the Berkeley/ETH paper *The Danger of Overthinking* (Cuadron et al., 2025) identifies it as the Reasoning-Action Dilemma across 4,018 agentic task trajectories ([arXiv:2502.08235](https://arxiv.org/abs/2502.08235)), and *Large Reasoning Models are not thinking straight* ([arXiv:2507.00711](https://arxiv.org/abs/2507.00711)) shows that models disregard correct solutions even when explicitly provided them. Gregorian Mode's `reasoning-execution-design-coherence` skill is built directly against this pattern.
-
-**Conventional-pattern gravity.** A `<div>` with border-radius, padding, and box-shadow is a card even if it is named `surface`. Renaming is not redesigning. Left unopposed, agents reach for the nearest conventional pattern — cards, tabs, modals, badges, filter panels — and a restyle changes nothing. The `spatial-audit` skill is the detection instrument against this gravity: it identifies patterns by rendered shape and behavior, not by class name, and rejects fixes that swap one conventional pattern for another.
+| The failure pattern | What Gregorian Mode does about it |
+|---|---|
+| **The reasoning–execution collapse.** An agent generates correct, specific design analysis, then labels that reasoning "overthinking," rushes execution, and produces output that contradicts the analysis it just completed. When the user gives corrective feedback, the agent reasons correctly again — and repeats the collapse. This is documented in the research: the Berkeley/ETH paper *The Danger of Overthinking* (Cuadron et al., 2025) identifies it as the Reasoning-Action Dilemma across 4,018 agentic task trajectories ([arXiv:2502.08235](https://arxiv.org/abs/2502.08235)), and *Large Reasoning Models are not thinking straight* ([arXiv:2507.00711](https://arxiv.org/abs/2507.00711)) shows that models disregard correct solutions even when explicitly provided them. | The `reasoning-execution-design-coherence` skill is built directly against this pattern. |
+| **Conventional-pattern gravity.** A `<div>` with border-radius, padding, and box-shadow is a card even if it is named `surface`. Renaming is not redesigning. Left unopposed, agents reach for the nearest conventional pattern — cards, tabs, modals, badges, filter panels — and a restyle changes nothing. | The `spatial-audit` skill is the detection instrument against this gravity: it identifies patterns by rendered shape and behavior, not by class name, and rejects fixes that swap one conventional pattern for another. |
 
 The positive philosophy underneath both is spatial: interface elements should behave like physical objects in a space — visual form should do utility work, nothing important should hide behind clicks, and every element should answer "would this exist in a physical version of this space?"
 
-## Install
+## 📦 Install
+
+<a name="install" id="install"></a>
 
 No build step, no package manager, no runtime dependencies — the plugin is plain markdown that a compatible agent discovers on load. All skills live under `skills/`; the root `plugin.json` is an [Agent Plugins 1.0.0](https://agent-plugins.org/specification) manifest, which is the portable source of truth.
 
-### Claude Code
+**The five headline agents at a glance:**
+
+| Agent | Install method | What ships | Verification |
+|---|---|---|---|
+| [**Claude Code**](#claude-code) | `claude --plugin-dir ./Gregorian-Mode` | All five skills, plus the slash command and the subagent under `com.anthropic.claude/` | Documented direct-load path — there is no `marketplace.json` in this repository, so `/plugin marketplace add` will not work |
+| [**Hermes Agent**](#hermes-agent) | `hermes plugins install … --no-enable` → `enable` → `gateway restart` | The five portable skills, discovered from the manifest | ✅ Verified against the live runtime: install, enable, and skill discovery all work with the repository as shipped |
+| [**Codex**](#codex) | `codex plugin add ./Gregorian-Mode` (Codex 0.146.0 and newer) | The portable root [`plugin.json`](plugin.json) (recommended) or the issue-prescribed [.codex-plugin/plugin.json](.codex-plugin/plugin.json) fallback | Documented: the sanctioned slot per OpenAI's packaging documentation |
+| [**Cursor**](#cursor) | Cursor Settings → Customize → Plugins, importing from the cloned directory | The portable `skills/` directory plus the Claude-namespace `commands/` and `agents/`, via [.cursor-plugin/plugin.json](.cursor-plugin/plugin.json) | Manifest-driven; Cursor reads the namespaces where a Claude-style command or agent is understood |
+| [**GitHub Copilot**](#github-copilot) | VS Code: **Chat: Install Plugin From Source** → repo URL | Portable `skills/` + root `plugin.json` + [`com.github.copilot/`](com.github.copilot) components (interrogator agent, command wrapper) | ✅ The VS Code path is the verified install; the CLI marketplace path would need a `marketplace.json` the repository does not ship |
+
+Full instructions, one collapsible block per agent:
+
+<a name="claude-code" id="claude-code"></a>
+<details>
+<summary><strong>Claude Code</strong> · <code>claude --plugin-dir ./Gregorian-Mode</code></summary>
 
 Requires [Claude Code](https://claude.com/claude-code).
 
@@ -54,7 +93,11 @@ claude --plugin-dir ./Gregorian-Mode
 
 The `--plugin-dir` flag loads the plugin directly without marketplace installation, and also accepts a `.zip` archive of the plugin directory. There is no `marketplace.json` in this repository, so `/plugin marketplace add AlastairZeved/Gregorian-Mode` will not work; `--plugin-dir` is the documented direct-load path. The command and subagent that Claude Code loads live under the `com.anthropic.claude/` client namespace.
 
-### Hermes Agent
+</details>
+
+<a name="hermes-agent" id="hermes-agent"></a>
+<details>
+<summary><strong>Hermes Agent</strong> · <code>hermes plugins install … --no-enable</code></summary>
 
 ```bash
 hermes plugins install AlastairZeved/Gregorian-Mode --no-enable
@@ -64,7 +107,11 @@ hermes gateway restart
 
 Portable Agent Plugins packages install disabled by default; enable explicitly and restart the gateway for the skills to take effect. (Verified against the live runtime: the install, enable, and skill discovery all work with the repository as shipped.)
 
-### Codex
+</details>
+
+<a name="codex" id="codex"></a>
+<details>
+<summary><strong>Codex</strong> · <code>codex plugin add ./Gregorian-Mode</code></summary>
 
 Requires OpenAI Codex. Two paths, both shipped:
 
@@ -78,7 +125,11 @@ codex plugin add ./Gregorian-Mode
 
 `plugin add` is the Codex CLI subcommand for local directories (Codex 0.146.0 and newer use `plugin add`, not `plugin install`). The interrogator subagent stays in the Claude namespace — Codex subagents use TOML definitions, which this repo does not ship.
 
-### Cursor
+</details>
+
+<a name="cursor" id="cursor"></a>
+<details>
+<summary><strong>Cursor</strong> · Settings → Customize → Plugins</summary>
 
 Requires Cursor. The repository ships a [.cursor-plugin/plugin.json](.cursor-plugin/plugin.json) manifest pointing Cursor at the portable `skills/` directory and at the Claude-namespace `commands/` and `agents/`.
 
@@ -88,7 +139,11 @@ git clone https://github.com/AlastairZeved/Gregorian-Mode.git
 
 Install from the repo: **Cursor Settings → Customize → Plugins** (or the Customize page), using an import from the cloned directory. The manifest's `agents` and `commands` paths reference the `com.anthropic.claude/` client namespace (issue #2's packaging split); Cursor reads them where a Claude-style command or agent is understood.
 
-### GitHub Copilot
+</details>
+
+<a name="github-copilot" id="github-copilot"></a>
+<details>
+<summary><strong>GitHub Copilot</strong> · VS Code "Install Plugin From Source"</summary>
 
 Requires Copilot in VS Code, the Copilot CLI, or the app. Copilot supports Agent Plugins 1.0.0: it reads the portable `skills/` directory and the root `plugin.json`, then reads Copilot-specific components from the [`com.github.copilot/`](com.github.copilot) client namespace. This repository ships components in that namespace — the interrogator as an `.agent.md` custom agent and the fix procedure as a command wrapper — so Copilot users get the full plugin, not only the portable skills.
 
@@ -99,7 +154,12 @@ https://github.com/AlastairZeved/Gregorian-Mode
 
 In the Copilot CLI, install from a marketplace: `copilot plugin marketplace add AlastairZeved/Gregorian-Mode` followed by `copilot plugin install gregorian-mode@AlastairZeved/Gregorian-Mode` (the repo needs a `marketplace.json` to be configured as a CLI marketplace; without one, the VS Code "Install Plugin From Source" path above is the verified install). Support for agent plugins can be toggled with the `chat.plugins.enabled` VS Code setting. Skills appear in the **Configure Skills** menu; the interrogator agent appears alongside custom agents.
 
-### Pi Agent
+</details>
+
+**More agents, plus the universal path:**
+
+<details>
+<summary><strong>Pi Agent</strong> · clone into <code>~/.pi/agent/</code></summary>
 
 Pi Agent discovers skills in its config directory. Clone the repository there; the portable `skills/` directory is found automatically — no manifest needed.
 
@@ -107,7 +167,10 @@ Pi Agent discovers skills in its config directory. Clone the repository there; t
 git clone https://github.com/AlastairZeved/Gregorian-Mode.git ~/.pi/agent/
 ```
 
-### Cline
+</details>
+
+<details>
+<summary><strong>Cline</strong> · copy <code>skills/</code> to <code>~/.cline/skills/</code></summary>
 
 ```bash
 git clone https://github.com/AlastairZeved/Gregorian-Mode.git
@@ -115,7 +178,10 @@ mkdir -p ~/.cline/skills
 cp -r Gregorian-Mode/skills/* ~/.cline/skills/
 ```
 
-### Gemini CLI
+</details>
+
+<details>
+<summary><strong>Gemini CLI</strong> · <code>.gemini/skills/</code> or <code>~/.gemini/skills/</code></summary>
 
 Install per-project or globally:
 
@@ -130,7 +196,10 @@ mkdir -p ~/.gemini/skills
 git clone https://github.com/AlastairZeved/Gregorian-Mode.git ~/.gemini/skills/Gregorian-Mode
 ```
 
-### Windsurf
+</details>
+
+<details>
+<summary><strong>Windsurf</strong> · <code>.windsurf/skills/</code> or <code>~/.windsurf/skills/</code></summary>
 
 Install per-project or globally:
 
@@ -145,7 +214,10 @@ mkdir -p ~/.windsurf/skills
 git clone https://github.com/AlastairZeved/Gregorian-Mode.git ~/.windsurf/skills/Gregorian-Mode
 ```
 
-### OpenCode
+</details>
+
+<details>
+<summary><strong>OpenCode</strong> · native SKILL.md discovery</summary>
 
 OpenCode has native SKILL.md support. Per its [skills documentation](https://opencode.ai/docs/skills/), it discovers skills in project and global locations — including Claude-compatible paths — and walks up from the working directory to the git worktree. Clone the plugin and copy the skill folders into a discovered location:
 
@@ -157,7 +229,10 @@ cp -r Gregorian-Mode/skills/* .opencode/skills/
 
 Global alternative: `~/.config/opencode/skills/`. Claude-compatible paths (`.claude/skills/`, `~/.claude/skills/`) work without copying.
 
-### Aider
+</details>
+
+<details>
+<summary><strong>Aider</strong> · <code>npx openskills install</code> + <code>sync</code></summary>
 
 [Aider](https://aider.chat) reads `AGENTS.md` rather than SKILL.md files. [openskills](https://github.com/numman-ali/openskills) syncs SKILL.md-format skills into an `AGENTS.md`-compatible section (verified subcommands):
 
@@ -168,7 +243,10 @@ npx openskills sync          # regenerates AGENTS.md with the skills
 
 Use `npx openskills list` to confirm the five skills installed, and `npx openskills read form-is-function` to load one into context.
 
-### OpenClaw
+</details>
+
+<details>
+<summary><strong>OpenClaw</strong> · <code>openclaw plugins install git:github.com/…</code></summary>
 
 OpenClaw installs bundles directly from git — the standard-format detection picks this repo up as an Agent Plugins (or Codex-marker) bundle and maps the portable `skills/` automatically:
 
@@ -183,15 +261,22 @@ Two OpenClaw-specific notes, verified against its bundle documentation:
 - **Detection precedence.** OpenClaw checks `.codex-plugin/` before the root `plugin.json`, so this repository is detected as a *Codex* bundle rather than an *Agent* bundle. The practical impact is nil — Codex bundles map `skills/` identically — but `openclaw plugins inspect <id>` will report the Codex format.
 - **The `ai.openclaw` namespace is reserved, not consumed.** OpenClaw reads `extensions["ai.openclaw"]` from the root manifest (currently only an `activation` setting) and ignores reverse-domain client *directories* — so no such directory belongs in this repo. If the plugin ever needs OpenClaw-specific metadata, it goes under `extensions["ai.openclaw"]` in [`plugin.json`](plugin.json).
 
-### Any other SKILL.md-compatible agent
+</details>
+
+<details>
+<summary><strong>Any other SKILL.md-compatible agent</strong> · copy a skill folder</summary>
 
 Copy any folder under `skills/` into the agent's skills directory. Each skill is a self-contained `SKILL.md` with YAML frontmatter (`name`, `license`, `description`); nothing else is required.
+
+</details>
 
 ### Dependencies
 
 None. Markdown only.
 
-## Usage
+## 🚀 Usage
+
+<a name="usage" id="usage"></a>
 
 The skills require nothing from you — that is the point. `form-is-function` and `reasoning-execution-design-coherence` fire on their own when the session matches their triggers, and `spatial-audit` runs when work is being reviewed or presented. You never invoke them directly.
 
@@ -212,7 +297,9 @@ The argument is any design, component, or file you want fixed. A run then procee
 
 The output returns the reworked design plus a rationale for every change: which conventional pattern was rejected, and what the new form communicates that text alone could not.
 
-## Components
+## 🧩 Components
+
+<a name="components" id="components"></a>
 
 Nine markdown components. The five skills are portable to any SKILL.md-compatible agent; the command and the subagent ship twice — as Claude Code conveniences under `com.anthropic.claude/` and as Copilot components under `com.github.copilot/` — wrapping the same two skills:
 
@@ -230,7 +317,9 @@ Nine markdown components. The five skills are portable to any SKILL.md-compatibl
 
 Each skill's `description` field is its trigger: agents read the descriptions and load the skill when the session matches, with no manual invocation. The fix procedure is the only manually invoked door.
 
-## Philosophy
+## 🏛️ Philosophy
+
+<a name="philosophy" id="philosophy"></a>
 
 **The first principle.** Design and function are not two categories to balance or trade off against each other. They are a single interrogation applied to any object, component, or decision until its value is defensible across both dimensions simultaneously — or until it earns its impermanence honestly as a working model. This is not a preference; it is the prior condition, and it governs before any conversation begins. A choice originating in form is held to the exact same standard as a choice originating in function: a green button that is green because the other buttons are green has failed, and a component placed because an action needed a home has failed, and neither failure is more acceptable than the other.
 
