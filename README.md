@@ -64,13 +64,124 @@ hermes gateway restart
 
 Portable Agent Plugins packages install disabled by default; enable explicitly and restart the gateway for the skills to take effect. (Verified against the live runtime: the install, enable, and skill discovery all work with the repository as shipped.)
 
-### Codex, Cursor, Copilot, ChatGPT, Kiro, VS Code
+### Codex
+
+Requires OpenAI Codex. Two paths, both shipped:
+
+- **Portable (recommended).** The root [`plugin.json`](plugin.json) declares the Agent Plugins schema, and Codex reads its OpenAI-specific presentation data from `extensions["com.openai"]` (display name "Gregorian Mode", category "design") — the sanctioned slot per OpenAI's packaging documentation.
+- **Compatibility fallback.** The issue-prescribed [.codex-plugin/plugin.json](.codex-plugin/plugin.json) manifest, which OpenAI documents as a supported fallback for existing `.codex-plugin/` packages.
 
 ```bash
-npx plugins.sh install <slug>
+git clone https://github.com/AlastairZeved/Gregorian-Mode.git
+codex plugin add ./Gregorian-Mode
 ```
 
-via [plugins.sh](https://plugins.sh), the Agent Plugins translation layer. Note: the plugin is **not yet listed** in the plugins.sh directory, so the install command will not resolve this repository until it is submitted (see [Contributing](#contributing)). You can validate the package against the standard today with `npx plugins.sh validate https://github.com/AlastairZeved/Gregorian-Mode` — the root manifest reports as conformant.
+`plugin add` is the Codex CLI subcommand for local directories (Codex 0.146.0 and newer use `plugin add`, not `plugin install`). The interrogator subagent stays in the Claude namespace — Codex subagents use TOML definitions, which this repo does not ship.
+
+### Cursor
+
+Requires Cursor. The repository ships a [.cursor-plugin/plugin.json](.cursor-plugin/plugin.json) manifest pointing Cursor at the portable `skills/` directory and at the Claude-namespace `commands/` and `agents/`.
+
+```bash
+git clone https://github.com/AlastairZeved/Gregorian-Mode.git
+```
+
+Install from the repo: **Cursor Settings → Customize → Plugins** (or the Customize page), using an import from the cloned directory. The manifest's `agents` and `commands` paths reference the `com.anthropic.claude/` client namespace (issue #2's packaging split); Cursor reads them where a Claude-style command or agent is understood.
+
+### GitHub Copilot
+
+Requires Copilot in VS Code, the Copilot CLI, or the app. Copilot supports Agent Plugins 1.0.0: it reads the portable `skills/` directory and the root `plugin.json`, then reads Copilot-specific components from the [`com.github.copilot/`](com.github.copilot) client namespace. This repository ships components in that namespace — the interrogator as an `.agent.md` custom agent and the fix procedure as a command wrapper — so Copilot users get the full plugin, not only the portable skills.
+
+```bash
+# VS Code: Chat: Install Plugin From Source (Command Palette), then enter the repo URL
+https://github.com/AlastairZeved/Gregorian-Mode
+```
+
+In the Copilot CLI, install from a marketplace: `copilot plugin marketplace add AlastairZeved/Gregorian-Mode` followed by `copilot plugin install gregorian-mode@AlastairZeved/Gregorian-Mode` (the repo needs a `marketplace.json` to be configured as a CLI marketplace; without one, the VS Code "Install Plugin From Source" path above is the verified install). Support for agent plugins can be toggled with the `chat.plugins.enabled` VS Code setting. Skills appear in the **Configure Skills** menu; the interrogator agent appears alongside custom agents.
+
+### Pi Agent
+
+Pi Agent discovers skills in its config directory. Clone the repository there; the portable `skills/` directory is found automatically — no manifest needed.
+
+```bash
+git clone https://github.com/AlastairZeved/Gregorian-Mode.git ~/.pi/agent/
+```
+
+### Cline
+
+```bash
+git clone https://github.com/AlastairZeved/Gregorian-Mode.git
+mkdir -p ~/.cline/skills
+cp -r Gregorian-Mode/skills/* ~/.cline/skills/
+```
+
+### Gemini CLI
+
+Install per-project or globally:
+
+```bash
+# Per-project
+git clone https://github.com/AlastairZeved/Gregorian-Mode.git
+mkdir -p .gemini/skills
+cp -r Gregorian-Mode/skills/* .gemini/skills/
+
+# Global
+mkdir -p ~/.gemini/skills
+git clone https://github.com/AlastairZeved/Gregorian-Mode.git ~/.gemini/skills/Gregorian-Mode
+```
+
+### Windsurf
+
+Install per-project or globally:
+
+```bash
+# Per-project
+git clone https://github.com/AlastairZeved/Gregorian-Mode.git
+mkdir -p .windsurf/skills
+cp -r Gregorian-Mode/skills/* .windsurf/skills/
+
+# Global
+mkdir -p ~/.windsurf/skills
+git clone https://github.com/AlastairZeved/Gregorian-Mode.git ~/.windsurf/skills/Gregorian-Mode
+```
+
+### OpenCode
+
+OpenCode has native SKILL.md support. Per its [skills documentation](https://opencode.ai/docs/skills/), it discovers skills in project and global locations — including Claude-compatible paths — and walks up from the working directory to the git worktree. Clone the plugin and copy the skill folders into a discovered location:
+
+```bash
+git clone https://github.com/AlastairZeved/Gregorian-Mode.git
+mkdir -p .opencode/skills
+cp -r Gregorian-Mode/skills/* .opencode/skills/
+```
+
+Global alternative: `~/.config/opencode/skills/`. Claude-compatible paths (`.claude/skills/`, `~/.claude/skills/`) work without copying.
+
+### Aider
+
+[Aider](https://aider.chat) reads `AGENTS.md` rather than SKILL.md files. [openskills](https://github.com/numman-ali/openskills) syncs SKILL.md-format skills into an `AGENTS.md`-compatible section (verified subcommands):
+
+```bash
+npx openskills install https://github.com/AlastairZeved/Gregorian-Mode
+npx openskills sync          # regenerates AGENTS.md with the skills
+```
+
+Use `npx openskills list` to confirm the five skills installed, and `npx openskills read form-is-function` to load one into context.
+
+### OpenClaw
+
+OpenClaw installs bundles directly from git — the standard-format detection picks this repo up as an Agent Plugins (or Codex-marker) bundle and maps the portable `skills/` automatically:
+
+```bash
+openclaw plugins install git:github.com/AlastairZeved/Gregorian-Mode
+openclaw plugins list        # verify: shows Format: bundle
+openclaw gateway restart     # mapped skills load in the next session
+```
+
+Two OpenClaw-specific notes, verified against its bundle documentation:
+
+- **Detection precedence.** OpenClaw checks `.codex-plugin/` before the root `plugin.json`, so this repository is detected as a *Codex* bundle rather than an *Agent* bundle. The practical impact is nil — Codex bundles map `skills/` identically — but `openclaw plugins inspect <id>` will report the Codex format.
+- **The `ai.openclaw` namespace is reserved, not consumed.** OpenClaw reads `extensions["ai.openclaw"]` from the root manifest (currently only an `activation` setting) and ignores reverse-domain client *directories* — so no such directory belongs in this repo. If the plugin ever needs OpenClaw-specific metadata, it goes under `extensions["ai.openclaw"]` in [`plugin.json`](plugin.json).
 
 ### Any other SKILL.md-compatible agent
 
@@ -103,7 +214,7 @@ The output returns the reworked design plus a rationale for every change: which 
 
 ## Components
 
-Seven markdown components. The five skills are portable to any SKILL.md-compatible agent; the command and the subagent are Claude Code conveniences that wrap two of the skills:
+Nine markdown components. The five skills are portable to any SKILL.md-compatible agent; the command and the subagent ship twice — as Claude Code conveniences under `com.anthropic.claude/` and as Copilot components under `com.github.copilot/` — wrapping the same two skills:
 
 | Component | Type | Role |
 |---|---|---|
@@ -114,6 +225,8 @@ Seven markdown components. The five skills are portable to any SKILL.md-compatib
 | [`interrogator`](skills/interrogator/SKILL.md) | Skill (portable) | The pressure — interrogation applied to a choice that resists |
 | [`/fix-my-design`](com.anthropic.claude/commands/fix-my-design.md) | Slash command (Claude Code) | Thin wrapper: loads and follows the `fix-my-design` skill |
 | [`interrogator`](com.anthropic.claude/agents/interrogator.md) | Subagent (Claude Code) | The pressure — interrogation applied to a choice that resists |
+| [`fix-my-design`](com.github.copilot/commands/fix-my-design.command.md) | Command (Copilot) | Thin wrapper: loads and follows the `fix-my-design` skill |
+| [`interrogator`](com.github.copilot/agents/interrogator.agent.md) | Custom agent (Copilot) | The pressure — interrogation applied to a choice that resists |
 
 Each skill's `description` field is its trigger: agents read the descriptions and load the skill when the session matches, with no manual invocation. The fix procedure is the only manually invoked door.
 
@@ -152,7 +265,7 @@ The contribution requirements follow from what the plugin is:
 
 - **Markdown only.** The plugin is prompt-level enforcement by design; do not add executable code, hooks, or build steps. `plugin.json` carries metadata, nothing more.
 - **Descriptions are triggers.** A new skill, command, or agent is only as good as its YAML frontmatter `description`, because that is what agents read to decide when to load it. Write descriptions that name their triggers concretely.
-- **Respect the packaging split.** Portable components (skills) live at the root; client-specific conveniences (commands, agents) live under `com.anthropic.claude/`. A new portable component goes under `skills/`; a Claude Code wrapper for it goes in the client namespace.
+- **Respect the packaging split.** Portable components (skills) live at the root; client-specific conveniences live in that client's namespace directory (`com.anthropic.claude/`, `com.github.copilot/`, …) or its adapter manifest (`.codex-plugin/`, `.cursor-plugin/`). A new portable component goes under `skills/`; a client wrapper for it goes in that client's namespace.
 - **The standard applies to the plugin's own output.** Changes to the skills, command, or agent should survive the same interrogation they enforce — name what conventional documentation pattern you are rejecting and what the change adds.
 
 ## License
