@@ -1,0 +1,8 @@
+{
+  "name": "gregorian-mode",
+  "version": "1.0.0",
+  "description": "Portable design-enforcement plugin.",
+  "skills": "./skills/",
+  "agents": "./com.anthropic.claude/agents/",
+  "commands": "./com.anthropic.claude/commands/"
+}

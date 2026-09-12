@@ -1,0 +1,10 @@
+{
+  "name": "gregorian-mode",
+  "version": "1.0.0",
+  "description": "Portable design-enforcement plugin.",
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Gregorian Mode",
+    "category": "design"
+  }
+}
