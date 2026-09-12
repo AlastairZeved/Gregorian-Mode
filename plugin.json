@@ -7,5 +7,13 @@
   "homepage": "https://github.com/AlastairZeved/Gregorian-Mode",
   "repository": "https://github.com/AlastairZeved/Gregorian-Mode",
   "license": "MIT",
-  "keywords": ["design", "ui-ux", "skills", "methodology"]
+  "keywords": ["design", "ui-ux", "skills", "methodology"],
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "Gregorian Mode",
+        "category": "design"
+      }
+    }
+  }
 }

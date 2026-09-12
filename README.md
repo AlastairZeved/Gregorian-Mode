@@ -66,7 +66,10 @@ Portable Agent Plugins packages install disabled by default; enable explicitly a
 
 ### Codex
 
-Requires OpenAI Codex. The repository ships a [.codex-plugin/plugin.json](.codex-plugin/plugin.json) manifest that maps the portable `skills/` directory (and the plugin's display name and category) for Codex's loader.
+Requires OpenAI Codex. Two paths, both shipped:
+
+- **Portable (recommended).** The root [`plugin.json`](plugin.json) declares the Agent Plugins schema, and Codex reads its OpenAI-specific presentation data from `extensions["com.openai"]` (display name "Gregorian Mode", category "design") — the sanctioned slot per OpenAI's packaging documentation.
+- **Compatibility fallback.** The issue-prescribed [.codex-plugin/plugin.json](.codex-plugin/plugin.json) manifest, which OpenAI documents as a supported fallback for existing `.codex-plugin/` packages.
 
 ```bash
 git clone https://github.com/AlastairZeved/Gregorian-Mode.git
@@ -87,13 +90,14 @@ Install from the repo: **Cursor Settings → Customize → Plugins** (or the Cus
 
 ### GitHub Copilot
 
-Requires Copilot in VS Code, the CLI, or the app. Copilot supports Agent Plugins 1.0.0: it reads the portable `skills/` directory and the root `plugin.json` from the repository root, then looks inside the [`com.github.copilot/`](com.github.copilot) client namespace for Copilot-specific extensions. This repository ships no Copilot-specific components — the portable skills load as-is, so no adapter directory with content is required.
+Requires Copilot in VS Code, the Copilot CLI, or the app. Copilot supports Agent Plugins 1.0.0: it reads the portable `skills/` directory and the root `plugin.json`, then reads Copilot-specific components from the [`com.github.copilot/`](com.github.copilot) client namespace. This repository ships components in that namespace — the interrogator as an `.agent.md` custom agent and the fix procedure as a command wrapper — so Copilot users get the full plugin, not only the portable skills.
 
 ```bash
-git clone https://github.com/AlastairZeved/Gregorian-Mode.git
+# VS Code: Chat: Install Plugin From Source (Command Palette), then enter the repo URL
+https://github.com/AlastairZeved/Gregorian-Mode
 ```
 
-Load the cloned repository as a plugin directory in VS Code settings or via the Copilot CLI. The [`com.github.copilot/`](com.github.copilot) directory is the designated home for any Copilot-specific wrapper added later.
+In the Copilot CLI, install from a marketplace: `copilot plugin marketplace add AlastairZeved/Gregorian-Mode` followed by `copilot plugin install gregorian-mode@AlastairZeved/Gregorian-Mode` (the repo needs a `marketplace.json` to be configured as a CLI marketplace; without one, the VS Code "Install Plugin From Source" path above is the verified install). Support for agent plugins can be toggled with the `chat.plugins.enabled` VS Code setting. Skills appear in the **Configure Skills** menu; the interrogator agent appears alongside custom agents.
 
 ### Pi Agent
 
@@ -166,13 +170,18 @@ Use `npx openskills list` to confirm the five skills installed, and `npx openski
 
 ### OpenClaw
 
-OpenClaw's client-extension namespace is `ai.openclaw/`. Clone the repository and copy that namespace path (create it if your OpenClaw version expects it):
+OpenClaw installs bundles directly from git — the standard-format detection picks this repo up as an Agent Plugins (or Codex-marker) bundle and maps the portable `skills/` automatically:
 
 ```bash
-git clone https://github.com/AlastairZeved/Gregorian-Mode.git
-mkdir -p ai.openclaw
-cp -r Gregorian-Mode/skills/* ai.openclaw/skills/
+openclaw plugins install git:github.com/AlastairZeved/Gregorian-Mode
+openclaw plugins list        # verify: shows Format: bundle
+openclaw gateway restart     # mapped skills load in the next session
 ```
+
+Two OpenClaw-specific notes, verified against its bundle documentation:
+
+- **Detection precedence.** OpenClaw checks `.codex-plugin/` before the root `plugin.json`, so this repository is detected as a *Codex* bundle rather than an *Agent* bundle. The practical impact is nil — Codex bundles map `skills/` identically — but `openclaw plugins inspect <id>` will report the Codex format.
+- **The `ai.openclaw` namespace is reserved, not consumed.** OpenClaw reads `extensions["ai.openclaw"]` from the root manifest (currently only an `activation` setting) and ignores reverse-domain client *directories* — so no such directory belongs in this repo. If the plugin ever needs OpenClaw-specific metadata, it goes under `extensions["ai.openclaw"]` in [`plugin.json`](plugin.json).
 
 ### Any other SKILL.md-compatible agent
 
@@ -205,7 +214,7 @@ The output returns the reworked design plus a rationale for every change: which 
 
 ## Components
 
-Seven markdown components. The five skills are portable to any SKILL.md-compatible agent; the command and the subagent are Claude Code conveniences that wrap two of the skills:
+Nine markdown components. The five skills are portable to any SKILL.md-compatible agent; the command and the subagent ship twice — as Claude Code conveniences under `com.anthropic.claude/` and as Copilot components under `com.github.copilot/` — wrapping the same two skills:
 
 | Component | Type | Role |
 |---|---|---|
@@ -216,6 +225,8 @@ Seven markdown components. The five skills are portable to any SKILL.md-compatib
 | [`interrogator`](skills/interrogator/SKILL.md) | Skill (portable) | The pressure — interrogation applied to a choice that resists |
 | [`/fix-my-design`](com.anthropic.claude/commands/fix-my-design.md) | Slash command (Claude Code) | Thin wrapper: loads and follows the `fix-my-design` skill |
 | [`interrogator`](com.anthropic.claude/agents/interrogator.md) | Subagent (Claude Code) | The pressure — interrogation applied to a choice that resists |
+| [`fix-my-design`](com.github.copilot/commands/fix-my-design.command.md) | Command (Copilot) | Thin wrapper: loads and follows the `fix-my-design` skill |
+| [`interrogator`](com.github.copilot/agents/interrogator.agent.md) | Custom agent (Copilot) | The pressure — interrogation applied to a choice that resists |
 
 Each skill's `description` field is its trigger: agents read the descriptions and load the skill when the session matches, with no manual invocation. The fix procedure is the only manually invoked door.
 
