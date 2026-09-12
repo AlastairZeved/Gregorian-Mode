@@ -22,7 +22,7 @@ Gregorian Mode is a prompt-level enforcement system. It refuses to let design an
 
 ## Security
 
-There is nothing executable here. Gregorian Mode is markdown instructions, not code: `plugin.json` declares metadata only, and all behavior comes from three skills, one slash command, and one subagent that Claude Code auto-discovers from the plugin directory. The plugin makes no network calls, defines no hooks, and runs nothing.
+There is nothing executable here. Gregorian Mode is markdown instructions, not code: `plugin.json` declares metadata only, and all behavior comes from three skills, one slash command, and one subagent that Claude Code loads from the paths declared in `.claude-plugin/plugin.json`. The plugin makes no network calls, defines no hooks, and runs nothing.
 
 Two things to know before relying on it:
 
@@ -55,7 +55,7 @@ There is no `marketplace.json` in this repository yet, so `/plugin marketplace a
 
 ## Agent Plugins standard
 
-This repository is dual-packaged: it is both a Claude Code plugin (`.claude-plugin/`) and an **Agent Plugins 1.0.0** plugin (root `plugin.json`). The same skills under `skills/` serve both packaging standards — the skills are the portable source of truth; `commands/` and `agents/` are Claude Code conveniences on top of them.
+This repository is dual-packaged: it is both a Claude Code plugin (`.claude-plugin/`) and an **Agent Plugins 1.0.0** plugin (root `plugin.json`). The same skills under `skills/` serve both packaging standards — the skills are the portable source of truth; `commands/` and `agents/` are Claude Code conveniences on top of them, kept under the `com.anthropic.claude/` client namespace so the portable root stays clean per the Agent Plugins 1.0.0 standard.
 
 Install paths:
 
@@ -94,8 +94,8 @@ Seven markdown components — the skills are portable to any SKILL.md-compatible
 | [`spatial-audit`](skills/spatial-audit/SKILL.md) | Skill (portable + auto-firing) | The detector — audits built HTML/CSS against the non-conventional philosophy |
 | [`fix-my-design`](skills/fix-my-design/SKILL.md) | Skill (portable) | The orchestration procedure — audit → approval → rebuild → interrogator (portable form of the `/fix-my-design` command) |
 | [`interrogator`](skills/interrogator/SKILL.md) | Skill (portable) | The pressure — interrogation applied to a choice that resists (portable form of the `interrogator` subagent) |
-| [`/fix-my-design`](commands/fix-my-design.md) | Slash command (Claude Code) | Thin wrapper: loads and follows the `fix-my-design` skill |
-| [`interrogator`](agents/interrogator.md) | Subagent (Claude Code) | The pressure — interrogation applied to a choice that resists |
+| [`/fix-my-design`](com.anthropic.claude/commands/fix-my-design.md) | Slash command (Claude Code) | Thin wrapper: loads and follows the `fix-my-design` skill |
+| [`interrogator`](com.anthropic.claude/agents/interrogator.md) | Subagent (Claude Code) | The pressure — interrogation applied to a choice that resists |
 
 Each skill's description field is its trigger: Claude Code reads the descriptions and loads the skill when the session matches, with no manual invocation. The command is the only manually invoked door.
 
