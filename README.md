@@ -266,6 +266,7 @@ The contribution requirements follow from what the plugin is:
 - **Markdown only.** The plugin is prompt-level enforcement by design; do not add executable code, hooks, or build steps. `plugin.json` carries metadata, nothing more.
 - **Descriptions are triggers.** A new skill, command, or agent is only as good as its YAML frontmatter `description`, because that is what agents read to decide when to load it. Write descriptions that name their triggers concretely.
 - **Respect the packaging split.** Portable components (skills) live at the root; client-specific conveniences live in that client's namespace directory (`com.anthropic.claude/`, `com.github.copilot/`, …) or its adapter manifest (`.codex-plugin/`, `.cursor-plugin/`). A new portable component goes under `skills/`; a client wrapper for it goes in that client's namespace.
+- **Keep the four manifests in sync.** Version bumps and description changes must be applied to all four manifests; they are separate contracts with separate readers. A missed manifest drifts silently — `manifest-sync` (repo tooling, deliberately distinct from the plugin's markdown-only rule) fails CI when any tracked `plugin.json` disagrees on `name` or `version`.
 - **The standard applies to the plugin's own output.** Changes to the skills, command, or agent should survive the same interrogation they enforce — name what conventional documentation pattern you are rejecting and what the change adds.
 
 ## License
