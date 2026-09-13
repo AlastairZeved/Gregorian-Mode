@@ -25,7 +25,7 @@ Gregorian Mode is a plugin that holds one design standard over everything an AI 
 
 https://github.com/user-attachments/assets/b00c065b-b119-49e3-acbe-891ca90595c8
 
-*The 109-second showcase — the two failure patterns, the five skills, and the fix procedure in motion. Also kept beside it in this project: <a href="docs/assets/gregorian-mode-showcase.mp4">MP4 (45 MB)</a> · <a href="docs/assets/showcase-poster.jpg">poster frame</a>.*
+*The 109-second showcase — the two failure patterns, the five skills, and the fix procedure in motion. Also in this project: <a href="docs/assets/gregorian-mode-showcase.mp4">MP4 (45 MB)</a> · <a href="docs/assets/showcase-poster.jpg">poster frame</a>.*
 
 ### How the five skills fire together
 
@@ -69,7 +69,7 @@ Gregorian Mode exists because two failure patterns keep producing bad software, 
 
 | The failure pattern | What Gregorian Mode does about it |
 |---|---|
-| **The reasoning–execution collapse.** An agent generates correct, specific design analysis, then labels that reasoning "overthinking," rushes execution, and produces output that contradicts the analysis it just completed. Correct it, and it reasons correctly again — then repeats the collapse. This is documented in the research: the Berkeley/ETH paper *The Danger of Overthinking* (Cuadron et al., 2025) identifies it as the Reasoning-Action Dilemma across 4,018 agentic task trajectories ([arXiv:2502.08235](https://arxiv.org/abs/2502.08235)), and *Large Reasoning Models are not thinking straight* ([arXiv:2507.00711](https://arxiv.org/abs/2507.00711)) shows that models disregard correct solutions even when someone hands them one. | The `reasoning-execution-design-coherence` skill is built directly against that collapse. |
+| **The reasoning–execution collapse.** An agent generates correct, specific design analysis, then labels that reasoning "overthinking," rushes execution, and produces output that contradicts the analysis it just completed. Correct it, and it reasons correctly again — then repeats the collapse. This is documented in the research: the Berkeley/ETH paper *The Danger of Overthinking* (Cuadron et al., 2025) identifies it as the Reasoning-Action Dilemma across 4,018 recorded agent task runs ([arXiv:2502.08235](https://arxiv.org/abs/2502.08235)), and *Large Reasoning Models are not thinking straight* ([arXiv:2507.00711](https://arxiv.org/abs/2507.00711)) shows that models disregard correct solutions even when someone hands them one. | The `reasoning-execution-design-coherence` skill is built directly against that collapse. |
 | **Conventional-pattern gravity.** This is the familiar shape the overview refused to let pass — what this document calls a *conventional pattern*. A `<div>` — a box in the code — given rounded corners, some space inside it, and a soft shadow under it, is a card even if it is named `surface`. Renaming is not redesigning. Left unopposed, agents reach for the nearest conventional pattern — the card, the tab strip, the modal window that drops over everything else, the badge pinned to a corner, the panel of filters — and a fresh coat of styling changes nothing. | The `spatial-audit` skill is the instrument set against that gravity: it recognises patterns by how they look and behave once drawn, not by what the code calls them, and it rejects any fix that swaps one conventional pattern for another. |
 
 What the two patterns share is a way of thinking the plugin calls spatial: anything on screen should behave like a physical object in a room. How it looks should be doing useful work rather than decorating, nothing important should hide behind a click, and every element has to answer one question — would this exist in a physical version of this space?
@@ -79,7 +79,7 @@ What the two patterns share is a way of thinking the plugin calls spatial: anyth
 <a name="install" id="install"></a>
 ## <img src="docs/assets/icons/package.svg" width="26" alt="" align="center"> 04 · Install
 
-No build step, no package manager, no runtime dependencies — the plugin is plain markdown that a compatible agent discovers on load. All skills live under `skills/`; the root `plugin.json` is an [Agent Plugins 1.0.0](https://agent-plugins.org/specification) manifest — a plain statement of what the plugin is and where its pieces sit — and that one file stays true whichever agent reads it.
+No build step, no package manager, no runtime dependencies — nothing to compile, nothing to install alongside it, nothing it needs to run. The plugin is plain markdown that a compatible agent discovers on load. All skills live under `skills/`; the root `plugin.json` is an [Agent Plugins 1.0.0](https://agent-plugins.org/specification) manifest — a plain statement of what the plugin is and where its pieces sit — and that one file stays true whichever agent reads it.
 
 **The five headline agents at a glance:**
 
@@ -136,7 +136,7 @@ git clone https://github.com/AlastairZeved/Gregorian-Mode.git
 codex plugin add ./Gregorian-Mode
 ```
 
-`plugin add` is the Codex CLI subcommand — the command you type in a terminal — for local directories (Codex 0.146.0 and newer use `plugin add`, not `plugin install`). The interrogator subagent stays in the Claude namespace — Codex subagents are described in TOML files, a different file format from the markdown the rest of the plugin is written in, which this repository does not ship.
+`plugin add` is the Codex CLI subcommand — the command you type in a terminal — for local directories (Codex 0.146.0 and newer use `plugin add`, not `plugin install`). The interrogator subagent stays in the Claude namespace. Codex describes its subagents in TOML — a different file format from the markdown the rest of the plugin is written in — and this repository ships none.
 
 </details>
 
@@ -261,7 +261,7 @@ Use `npx openskills list` to confirm the five skills installed, and `npx openski
 <details>
 <summary><strong>OpenClaw</strong> · <code>openclaw plugins install git:github.com/…</code></summary>
 
-OpenClaw installs bundles — a plugin's files packaged together — straight from git, the tool that keeps a project's files and copies them down to your machine. The standard-format detection picks this repository up as an Agent Plugins (or Codex-marker) bundle and maps the portable `skills/` automatically:
+OpenClaw installs bundles — a plugin's files packaged together — straight from git, the tool that tracks a project's files and copies them between machines. The standard-format detection picks this repository up as an Agent Plugins (or Codex-marker) bundle and maps the portable `skills/` automatically:
 
 ```bash
 openclaw plugins install git:github.com/AlastairZeved/Gregorian-Mode
@@ -304,10 +304,10 @@ or: *"Run fix-my-design on `settings.html`."*
 
 What you point it at is any design, component, or file you want fixed. A run then proceeds:
 
-1. **Detect.** The procedure runs `spatial-audit` on the target: every element is judged on five counts — the familiar pattern it leans on, how it behaves as a thing in a space, whether its looks are doing useful work, whether it holds its place while other things move, and how its content is framed — and findings come back ranked by how badly each one fails, each with a fix proposal.
+1. **Detect.** The procedure runs `spatial-audit` on the target: every element is judged on five counts — the conventional pattern it leans on, how it behaves as a thing in a space, whether its looks are doing useful work, whether it holds its place while other things move, and how its content is framed — and findings come back ranked by how badly each one fails, each with a fix proposal.
 2. **Present and wait.** Findings and proposals are shown. Nothing changes yet — the audit's approval gate holds inside the procedure.
 3. **Rebuild, don't patch.** Once you approve, each fix goes back to the last point that still held up and rebuilds from there. Adding styling is never the fix; if the audit's own list of patterns to avoid would catch the proposed fix, it is still conventional and gets redesigned.
-4. **Escalate resistant choices.** Where the conventional answer is strong and the better answer is not obvious, the procedure invokes the `interrogator` — as a subagent where the agent can hand work to a helper (Claude Code's Task tool, Hermes Agent's `delegate_task`), inside the same conversation otherwise.
+4. **Escalate resistant choices.** Where the conventional answer is strong and the better answer is not obvious, the procedure invokes the `interrogator` — as a subagent where your agent can hand work to a helper (Claude Code's Task tool, Hermes Agent's `delegate_task`), inside the same conversation otherwise.
 
 The output returns the reworked design plus a rationale for every change: which conventional pattern was rejected, and what the new form communicates that text alone could not.
 
@@ -320,10 +320,10 @@ Nine markdown components. The five skills travel to any agent that understands a
 
 | Component | Type | Role |
 |---|---|---|
-| [`form-is-function`](skills/form-is-function/SKILL.md) | Skill (portable + auto-firing) | The law — holds the first principle over every design or product decision |
+| [`form-is-function`](skills/form-is-function/SKILL.md) | Skill (portable + auto-firing) | The law — holds every design or product decision to the first principle |
 | [`reasoning-execution-design-coherence`](skills/reasoning-execution-design-coherence/SKILL.md) | Skill (portable + auto-firing) | The build guard — keeps the building tethered to the reasoning: commit a point, check it, rebuild from there |
 | [`spatial-audit`](skills/spatial-audit/SKILL.md) | Skill (portable + auto-firing) | The detector — reads the page as built, its markup and its styling, and audits it against the philosophy rather than against convention |
-| [`fix-my-design`](skills/fix-my-design/SKILL.md) | Skill (portable) | The orchestration procedure — audit → approval → rebuild → interrogator |
+| [`fix-my-design`](skills/fix-my-design/SKILL.md) | Skill (portable) | The fix procedure — the one you invoke by hand: audit → approval → rebuild → interrogator |
 | [`interrogator`](skills/interrogator/SKILL.md) | Skill (portable) | The pressure — the interrogation brought to bear on a choice that resists |
 | [`/fix-my-design`](com.anthropic.claude/commands/fix-my-design.md) | Slash command (Claude Code) | Thin wrapper: loads and follows the `fix-my-design` skill |
 | [`interrogator`](com.anthropic.claude/agents/interrogator.md) | Subagent (Claude Code) | The pressure — the interrogation brought to bear on a choice that resists |
