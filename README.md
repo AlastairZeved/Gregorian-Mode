@@ -23,9 +23,9 @@
 
 Gregorian Mode is a plugin that holds one design standard over everything an AI agent builds. It does not run as code — it is written instruction, plain text an agent reads and follows — so the same plugin moves to a different agent with nothing to compile, nothing to install alongside it, and nothing it depends on to work. It refuses to let design and function be separated, and it refuses to let a familiar shape pass just because it has been decorated. Five skills carry that standard — the law, the build guard, the detector, the fix procedure, the interrogator — and each carries its own activation trigger, so an agent loads a skill by itself the moment a session touches what it governs. The fix procedure is the one you ask for by name.
 
-https://github.com/user-attachments/assets/bb7b0823-652d-4e60-b161-463fbf37bca2
+https://github.com/user-attachments/assets/b00c065b-b119-49e3-acbe-891ca90595c8
 
-*The 72-second showcase — the two failure patterns, the five skills, and the fix procedure in motion. Also kept beside it in this project: <a href="docs/assets/gregorian-mode-showcase.mp4">MP4 (32 MB)</a> · <a href="docs/assets/showcase-poster.jpg">poster frame</a>.*
+*The 109-second showcase — the two failure patterns, the five skills, and the fix procedure in motion. Also kept beside it in this project: <a href="docs/assets/gregorian-mode-showcase.mp4">MP4 (45 MB)</a> · <a href="docs/assets/showcase-poster.jpg">poster frame</a>.*
 
 ### How the five skills fire together
 
