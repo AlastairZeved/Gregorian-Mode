@@ -2,21 +2,24 @@
   <img src="docs/assets/banner.png" alt="Gregorian Mode — form and function are inseparable." width="830">
 </p>
 
-# Gregorian Mode _(Gregorian-Mode)_
+<h1 align="center">Gregorian Mode</h1>
 
-[![Standard Readme Style](https://img.shields.io/badge/standard--readme-f7ce68.svg?style=flat-square)](https://github.com/RichardLitt/standard-readme)
-[![Agent Plugins 1.0.0](https://img.shields.io/badge/Agent_Plugins-1.0.0-blue.svg?style=flat-square)](plugin.json)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](LICENSE)
+<p align="center">
+  <a href="https://github.com/RichardLitt/standard-readme"><img src="https://img.shields.io/badge/standard--readme-f7ce68.svg?style=flat-square" alt="Standard Readme Style"></a>
+  <a href="plugin.json"><img src="https://img.shields.io/badge/Agent_Plugins-1.0.0-blue.svg?style=flat-square" alt="Agent Plugins 1.0.0"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square" alt="License: MIT"></a>
+</p>
 
-[![Install on Claude Code](https://img.shields.io/badge/install-Claude_Code-black?style=flat-square)](#claude-code)
-[![Install on Hermes Agent](https://img.shields.io/badge/install-Hermes_Agent-black?style=flat-square)](#hermes-agent)
-[![Install on Codex](https://img.shields.io/badge/install-Codex-black?style=flat-square)](#codex)
-[![Install on Cursor](https://img.shields.io/badge/install-Cursor-black?style=flat-square)](#cursor)
-[![Install on GitHub Copilot](https://img.shields.io/badge/install-GitHub_Copilot-black?style=flat-square)](#github-copilot)
-
-## ⚡ TL;DR
+<p align="center">
+  <a href="#claude-code"><img src="https://img.shields.io/badge/install-Claude_Code-black?style=flat-square" alt="Install on Claude Code"></a>
+  <a href="#hermes-agent"><img src="https://img.shields.io/badge/install-Hermes_Agent-black?style=flat-square" alt="Install on Hermes Agent"></a>
+  <a href="#codex"><img src="https://img.shields.io/badge/install-Codex-black?style=flat-square" alt="Install on Codex"></a>
+  <a href="#cursor"><img src="https://img.shields.io/badge/install-Cursor-black?style=flat-square" alt="Install on Cursor"></a>
+  <a href="#github-copilot"><img src="https://img.shields.io/badge/install-GitHub_Copilot-black?style=flat-square" alt="Install on GitHub Copilot"></a>
+</p>
 
 <a name="tldr" id="tldr"></a>
+## <img src="docs/assets/icons/bolt.svg" width="26" alt="" align="center"> 01 · Overview
 
 Gregorian Mode is a portable, prompt-level design-enforcement plugin — Agent Plugins 1.0.0, installable across multiple agents, with no build step, no package manager, and no runtime dependencies. It refuses to let design and function be separated, and it refuses to let a conventional pattern pass just because it has been styled. Five skills carry the enforcement — the law, the build guard, the detector, the fix procedure, the interrogator — and they fire on their own: install it, and every design decision in the session is held to the same standard.
 
@@ -24,34 +27,43 @@ https://github.com/user-attachments/assets/bb7b0823-652d-4e60-b161-463fbf37bca2
 
 *The 72-second showcase — the failure patterns, the five skills, and the fix procedure in motion. Also in-repo: <a href="docs/assets/gregorian-mode-showcase.mp4">MP4 (32 MB)</a> · <a href="docs/assets/showcase-poster.jpg">poster frame</a>.*
 
+### How the five skills fire together
+
+<p align="center">
+  <img src="docs/assets/system-map.svg" alt="System map: Form Is Function (the law) governs R-E-D Coherence (the build guard), which feeds Spatial Audit (the detector); the detector is the detection step of Fix-My-Design (the procedure), which hands resistant choices to the Interrogator (the pressure) — and a choice that resists returns to the procedure." width="900">
+</p>
 
 ## Table of Contents
 
-- [⚡ TL;DR](#tldr)
-- [🛡️ Security](#security)
-- [📜 Background](#background)
-- [📦 Install](#install)
-- [🚀 Usage](#usage)
-- [🧩 Components](#components)
-- [🏛️ Philosophy](#philosophy)
-- [Maintainers](#maintainers)
-- [Contributing](#contributing)
-- [License](#license)
+| | Chapter | What is in the room |
+|---|---|---|
+| <img src="docs/assets/icons/bolt.svg" width="20" alt=""> | [01 · Overview](#tldr) | The plugin in one paragraph · showcase video · how the five skills fire together |
+| <img src="docs/assets/icons/shield.svg" width="20" alt=""> | [02 · Security](#security) | What runs (nothing) · the two things to know before relying on it |
+| <img src="docs/assets/icons/scroll.svg" width="20" alt=""> | [03 · Background](#background) | The two failure patterns · the spatial philosophy underneath |
+| <img src="docs/assets/icons/package.svg" width="20" alt=""> | [04 · Install](#install) | Five headline agents · eight more paths · dependencies (none) |
+| <img src="docs/assets/icons/pointer.svg" width="20" alt=""> | [05 · Usage](#usage) | What fires on its own · the one door you pull · the four steps of a run |
+| <img src="docs/assets/icons/grid.svg" width="20" alt=""> | [06 · Components](#components) | The nine markdown components and where each one lives |
+| <img src="docs/assets/icons/columns.svg" width="20" alt=""> | [07 · Philosophy](#philosophy) | The first principle · the interrogation · failure, impermanence, rollback |
+| <img src="docs/assets/icons/eye.svg" width="20" alt=""> | [08 · Colophon](#colophon) | Design notes on this document · icon inventory · maintainers · contributing · license |
 
-## 🛡️ Security
+<p align="center"><img src="docs/assets/divider.svg" alt="" width="600"></p>
 
 <a name="security" id="security"></a>
+## <img src="docs/assets/icons/shield.svg" width="26" alt="" align="center"> 02 · Security
 
-There is nothing executable here. Gregorian Mode is markdown instructions, not code: `plugin.json` declares metadata only, and all behavior comes from five skills that an agent loads from the paths declared in the manifest. The plugin makes no network calls, defines no hooks, and runs nothing.
+> **The room is empty on purpose.** Nothing here executes. Gregorian Mode is markdown instructions, not code: `plugin.json` declares metadata only, and all behavior comes from five skills that an agent loads from the paths declared in the manifest. The plugin makes no network calls, defines no hooks, and runs nothing.
 
 Two things to know before relying on it:
 
-- **The approval gate is an instruction, not a lock.** The audit and the fix procedure are instructed to present findings and change nothing until you approve. That is a prompt-level discipline, not a runtime guarantee — review the findings yourself before approving anything.
-- **The skills auto-fire.** Agents read each skill's `description` field and load it whenever the session matches its triggers — `form-is-function` activates for any session touching a design or product decision. If you do not want that posture in a session, disable the plugin rather than arguing with it mid-session.
+| | The caution | What it means |
+|---|---|---|
+| <img src="docs/assets/icons/eye.svg" width="22" alt=""> | **The approval gate is an instruction, not a lock.** | The audit and the fix procedure are instructed to present findings and change nothing until you approve. That is a prompt-level discipline, not a runtime guarantee — review the findings yourself before approving anything. |
+| <img src="docs/assets/icons/flame.svg" width="22" alt=""> | **The skills auto-fire.** | Agents read each skill's `description` field and load it whenever the session matches its triggers — `form-is-function` activates for any session touching a design or product decision. If you do not want that posture in a session, disable the plugin rather than arguing with it mid-session. |
 
-## 📜 Background
+<p align="center"><img src="docs/assets/divider.svg" alt="" width="600"></p>
 
 <a name="background" id="background"></a>
+## <img src="docs/assets/icons/scroll.svg" width="26" alt="" align="center"> 03 · Background
 
 Gregorian Mode exists because two failure patterns keep producing bad software, and neither is a knowledge problem. The model usually reasons correctly. The failure happens after the reasoning.
 
@@ -62,9 +74,10 @@ Gregorian Mode exists because two failure patterns keep producing bad software, 
 
 The positive philosophy underneath both is spatial: interface elements should behave like physical objects in a space — visual form should do utility work, nothing important should hide behind clicks, and every element should answer "would this exist in a physical version of this space?"
 
-## 📦 Install
+<p align="center"><img src="docs/assets/divider.svg" alt="" width="600"></p>
 
 <a name="install" id="install"></a>
+## <img src="docs/assets/icons/package.svg" width="26" alt="" align="center"> 04 · Install
 
 No build step, no package manager, no runtime dependencies — the plugin is plain markdown that a compatible agent discovers on load. All skills live under `skills/`; the root `plugin.json` is an [Agent Plugins 1.0.0](https://agent-plugins.org/specification) manifest, which is the portable source of truth.
 
@@ -73,10 +86,10 @@ No build step, no package manager, no runtime dependencies — the plugin is pla
 | Agent | Install method | What ships | Verification |
 |---|---|---|---|
 | [**Claude Code**](#claude-code) | `claude --plugin-dir ./Gregorian-Mode` | All five skills, plus the slash command and the subagent under `com.anthropic.claude/` | Documented direct-load path — there is no `marketplace.json` in this repository, so `/plugin marketplace add` will not work |
-| [**Hermes Agent**](#hermes-agent) | `hermes plugins install … --no-enable` → `enable` → `gateway restart` | The five portable skills, discovered from the manifest | ✅ Verified against the live runtime: install, enable, and skill discovery all work with the repository as shipped |
+| [**Hermes Agent**](#hermes-agent) | `hermes plugins install … --no-enable` → `enable` → `gateway restart` | The five portable skills, discovered from the manifest | <img src="docs/assets/icons/guard.svg" width="18" alt="verified"> Verified against the live runtime: install, enable, and skill discovery all work with the repository as shipped |
 | [**Codex**](#codex) | `codex plugin add ./Gregorian-Mode` (Codex 0.146.0 and newer) | The portable root [`plugin.json`](plugin.json) (recommended) or the issue-prescribed [.codex-plugin/plugin.json](.codex-plugin/plugin.json) fallback | Documented: the sanctioned slot per OpenAI's packaging documentation |
 | [**Cursor**](#cursor) | Cursor Settings → Customize → Plugins, importing from the cloned directory | The portable `skills/` directory plus the Claude-namespace `commands/` and `agents/`, via [.cursor-plugin/plugin.json](.cursor-plugin/plugin.json) | Manifest-driven; Cursor reads the namespaces where a Claude-style command or agent is understood |
-| [**GitHub Copilot**](#github-copilot) | VS Code: **Chat: Install Plugin From Source** → repo URL | Portable `skills/` + root `plugin.json` + [`com.github.copilot/`](com.github.copilot) components (interrogator agent, command wrapper) | ✅ The VS Code path is the verified install; the CLI marketplace path would need a `marketplace.json` the repository does not ship |
+| [**GitHub Copilot**](#github-copilot) | VS Code: **Chat: Install Plugin From Source** → repo URL | Portable `skills/` + root `plugin.json` + [`com.github.copilot/`](com.github.copilot) components (interrogator agent, command wrapper) | <img src="docs/assets/icons/guard.svg" width="18" alt="verified"> The VS Code path is the verified install; the CLI marketplace path would need a `marketplace.json` the repository does not ship |
 
 Full instructions, one collapsible block per agent:
 
@@ -274,9 +287,10 @@ Copy any folder under `skills/` into the agent's skills directory. Each skill is
 
 None. Markdown only.
 
-## 🚀 Usage
+<p align="center"><img src="docs/assets/divider.svg" alt="" width="600"></p>
 
 <a name="usage" id="usage"></a>
+## <img src="docs/assets/icons/pointer.svg" width="26" alt="" align="center"> 05 · Usage
 
 The skills require nothing from you — that is the point. `form-is-function` and `reasoning-execution-design-coherence` fire on their own when the session matches their triggers, and `spatial-audit` runs when work is being reviewed or presented. You never invoke them directly.
 
@@ -297,9 +311,10 @@ The argument is any design, component, or file you want fixed. A run then procee
 
 The output returns the reworked design plus a rationale for every change: which conventional pattern was rejected, and what the new form communicates that text alone could not.
 
-## 🧩 Components
+<p align="center"><img src="docs/assets/divider.svg" alt="" width="600"></p>
 
 <a name="components" id="components"></a>
+## <img src="docs/assets/icons/grid.svg" width="26" alt="" align="center"> 06 · Components
 
 Nine markdown components. The five skills are portable to any SKILL.md-compatible agent; the command and the subagent ship twice — as Claude Code conveniences under `com.anthropic.claude/` and as Copilot components under `com.github.copilot/` — wrapping the same two skills:
 
@@ -317,36 +332,41 @@ Nine markdown components. The five skills are portable to any SKILL.md-compatibl
 
 Each skill's `description` field is its trigger: agents read the descriptions and load the skill when the session matches, with no manual invocation. The fix procedure is the only manually invoked door.
 
-## 🏛️ Philosophy
+<p align="center"><img src="docs/assets/divider.svg" alt="" width="600"></p>
 
 <a name="philosophy" id="philosophy"></a>
+## <img src="docs/assets/icons/columns.svg" width="26" alt="" align="center"> 07 · Philosophy
 
-**The first principle.** Design and function are not two categories to balance or trade off against each other. They are a single interrogation applied to any object, component, or decision until its value is defensible across both dimensions simultaneously — or until it earns its impermanence honestly as a working model. This is not a preference; it is the prior condition, and it governs before any conversation begins. A choice originating in form is held to the exact same standard as a choice originating in function: a green button that is green because the other buttons are green has failed, and a component placed because an action needed a home has failed, and neither failure is more acceptable than the other.
+| Room | What hangs in it |
+|---|---|
+| **The first principle** | Design and function are not two categories to balance or trade off against each other. They are a single interrogation applied to any object, component, or decision until its value is defensible across both dimensions simultaneously — or until it earns its impermanence honestly as a working model. This is not a preference; it is the prior condition, and it governs before any conversation begins. A choice originating in form is held to the exact same standard as a choice originating in function: a green button that is green because the other buttons are green has failed, and a component placed because an action needed a home has failed, and neither failure is more acceptable than the other. |
+| **The interrogation** | Every choice — regardless of how small, obvious, or conventional it appears — is run through eight questions before it is committed: 1. What is this thing, fully? 2. What has been used as this thing? 3. What could it be? 4. Does its design optimize or add value to its use? 5. Does its function borrow anything from its form? 6. What would be surprising or genuinely valuable here? 7. What does this choice connect to at module, app, and project level? 8. Can it tie to something already in progress? |
+| **Failure conditions** | A choice has failed the interrogation if it was made because adjacent choices were the same, because convention suggested it, because one dimension was satisfied and the other was not checked, because a pattern needed completing, because something needed to go somewhere, or because impermanence was never considered. Failure conditions are named directly, not softened. |
+| **Impermanence** | Every choice is editable. A working model earns its place by being useful long enough for a better answer to surface — the whiteboard doesn't fail when it's replaced, it succeeded by lasting exactly as long as it needed to. No choice is protected from re-interrogation by citing the effort that went into it. |
+| **Rollback, not patch** | When output collapses — execution betraying the reasoning that preceded it — the correct action is to roll back to the last verified-coherent position and rebuild. You cannot reason with poisoned context: patching collapsed output produces more collapse. |
+| **No tradeoff** | A choice that satisfies form but not function, or function but not form, has not finished the interrogation. |
 
-**The interrogation.** Every choice — regardless of how small, obvious, or conventional it appears — is run through eight questions before it is committed:
+<p align="center"><img src="docs/assets/divider.svg" alt="" width="600"></p>
 
-1. What is this thing, fully?
-2. What has been used as this thing?
-3. What could it be?
-4. Does its design optimize or add value to its use?
-5. Does its function borrow anything from its form?
-6. What would be surprising or genuinely valuable here?
-7. What does this choice connect to at module, app, and project level?
-8. Can it tie to something already in progress?
+<a name="colophon" id="colophon"></a>
+## <img src="docs/assets/icons/eye.svg" width="26" alt="" align="center"> 08 · Colophon
 
-**Failure conditions.** A choice has failed the interrogation if it was made because adjacent choices were the same, because convention suggested it, because one dimension was satisfied and the other was not checked, because a pattern needed completing, because something needed to go somewhere, or because impermanence was never considered. Failure conditions are named directly, not softened.
+### The design of this document
 
-**Impermanence.** Every choice is editable. A working model earns its place by being useful long enough for a better answer to surface — the whiteboard doesn't fail when it's replaced, it succeeded by lasting exactly as long as it needed to. No choice is protected from re-interrogation by citing the effort that went into it.
+This README practices the rule it documents: a section is a room, not a paragraph. Every chapter carries a number and an icon from one family; the icon set, the section ground, and the ornaments in this page are documented in [docs/icons.md](docs/icons.md).
 
-**Rollback, not patch.** When output collapses — execution betraying the reasoning that preceded it — the correct action is to roll back to the last verified-coherent position and rebuild. You cannot reason with poisoned context: patching collapsed output produces more collapse.
+| Element | The rule it follows |
+|---|---|
+| **Section ground** | Backgrounds are not flat. Each chapter sits on the *ruled-manuscript ground* — the document's one texture (documented in [docs/icons.md](docs/icons.md)): deep ink field, ruled baselines, faint drop-cap grid, thin gold chapter frame. |
+| **Icon family** | One set of inline SVG line marks — 24-unit grid, 2-unit stroke, round caps — replaces every emoji and decorative glyph on the page. |
+| **Structural breaks** | No section runs past six consecutive prose lines: tables, callouts, the system map, and icon-led lists break the walls. |
+| **Wayfinding** | Numbered chapters (01–08) plus the icon in every heading let a reader landing mid-page orient in seconds. |
 
-**No tradeoff.** A choice that satisfies form but not function, or function but not form, has not finished the interrogation.
-
-## Maintainers
+### Maintainers
 
 [@AlastairZeved](https://github.com/AlastairZeved)
 
-## Contributing
+### Contributing
 
 Issues and pull requests are welcome on [GitHub Issues](https://github.com/AlastairZeved/Gregorian-Mode/issues) — that is also the place for questions about how the skills or the fix procedure behave in a given agent.
 
@@ -358,6 +378,6 @@ The contribution requirements follow from what the plugin is:
 - **Keep the four manifests in sync.** Version bumps and description changes must be applied to all four manifests; they are separate contracts with separate readers. A missed manifest drifts silently — `manifest-sync` (repo tooling, deliberately distinct from the plugin's markdown-only rule) fails CI when any tracked `plugin.json` disagrees on `name` or `version`.
 - **The standard applies to the plugin's own output.** Changes to the skills, command, or agent should survive the same interrogation they enforce — name what conventional documentation pattern you are rejecting and what the change adds.
 
-## License
+### License
 
 MIT © Alastair Zeved — see [LICENSE](LICENSE) for the full text.
