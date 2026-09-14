@@ -21,9 +21,13 @@
 <a name="tldr" id="tldr"></a>
 ## <img src="docs/assets/icons/bolt.svg" width="26" alt="" align="center"> 01 · At a Glance
 
-Gregorian-Mode is an agent plugin built for designing with intention, your intention. It targets two mimetic sources of failure in agentic design: reasoning-execution collapse and conventional-pattern gravity. Five auto-firing skills built to maintain a user's stated intention for an idea throughout the building process as the agent works, translating intention to decisions in design systems, tokens, and UI, by running in the background. For existing work, a design audit can be invoked via /fix-my-design. When a decision cannot resolve without defaulting to standard, trendy/popular, or basic patterned decisions without justifying its use, a subagent is deployed to interrogate it. Again, these skills auto-fire and each one opens with a line describing when it applies; an agent reads that line and loads the skill whenever a session matches what it says. For example, `form-is-function` is invoked in any session touching a design or product decision. If you do not want that watchfulness in a session, disable the plugin rather than arguing with it mid-session.
+Gregorian-Mode is an agent plugin built for designing with intention, your intention. It targets two mimetic sources of failure in agentic design: reasoning-execution collapse and conventional-pattern gravity. Five auto-firing skills built to maintain a user's stated intention for an idea throughout the building process as the agent works, translating intention to decisions in design systems, tokens, and UI, by running in the background. For existing work, a design audit can be invoked via /fix-my-design. 
 
-https://github.com/user-attachments/assets/b00c065b-b119-49e3-acbe-891ca90595c8
+If a decision cannot resolve without defaulting to standard, trendy/popular, or basic patterned choices without justifying its use in both form and function, a subagent is deployed to interrogate it. 
+
+Again, these skills auto-fire and each one opens with a line describing when it applies; an agent reads that line and loads the skill whenever a session matches what it says. For example, `form-is-function` is invoked in any session touching a design or product decision. If you don't want to have that watchfulness interrupting in a session, disable the plugin rather than arguing with it mid-session.
+
+***[Insert video here]***
 
 <p align="center"><img src="docs/assets/divider.svg" alt="" width="600"></p>
 
